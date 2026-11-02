@@ -274,6 +274,14 @@ dialog::backdrop{background:rgba(30,25,15,.32);backdrop-filter:blur(2px)}
 .pp-cfg label{font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
 .pp-cfg input{padding:6px 8px}
 @media (prefers-reduced-motion:reduce){.pomo-pill.on .pdot{animation:none}}
+.sync{display:inline-flex;align-items:center;gap:7px;border:none;background:transparent;color:var(--muted);font-family:var(--f-body);font-size:12.5px;padding:6px 10px;border-radius:999px;white-space:nowrap}
+.sync:hover{background:var(--sunk);color:var(--ink)}
+.sync .sdot{width:7px;height:7px;border-radius:50%;background:var(--faint)}
+.sync.s-ok .sdot{background:var(--ok)}
+.sync.s-salvando .sdot{background:var(--warn);animation:respira 1.6s ease-in-out infinite}
+.sync.s-erro{color:var(--bad)} .sync.s-erro .sdot{background:var(--bad)}
+.sync.s-entrar{color:var(--ink)} .sync.s-entrar .sdot{background:var(--accent)}
+@media (max-width:720px){.sync{font-size:0;gap:0;padding:10px}.sync .sdot{width:9px;height:9px}}
 #toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,8px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:100;max-width:90vw}
 #toast.on{opacity:1;transform:translate(-50%,0)}
 @media (max-width:720px){
@@ -404,6 +412,9 @@ dialog::backdrop{background:rgba(30,25,15,.32);backdrop-filter:blur(2px)}
 <script>
 /* ================= Utilidades ================= */
 const STORAGE_KEY = 'mentor-concursos-v1';
+/* Sincronização entre aparelhos (opcional): URL e chave PÚBLICA (anon/publishable) do Supabase.
+   Pode deixar vazio e preencher pelo app (⚙ → Sincronização). Nunca coloque a service_role aqui. */
+const SUPABASE_PADRAO = { url: '', chave: '' };
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -451,10 +462,13 @@ function carregar() {
   S.materias.forEach(m => { if (CORES_ANTIGAS[m.cor]) m.cor = CORES_ANTIGAS[m.cor]; });
   try { const ui = JSON.parse(localStorage.getItem(STORAGE_KEY + '-ui') || '{}'); if (ui.aba) UI.aba = ui.aba; if (ui.vista) UI.vista = ui.vista; } catch (e) {}
 }
-function salvar() {
+function salvar(editou = true) {
+  if (editou) { S.meta ||= {}; S.meta.atualizadoEm = Date.now(); }
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(S)); } catch (e) { toast('Não foi possível salvar no navegador. Exporte um backup.'); }
-  try { localStorage.setItem(STORAGE_KEY + '-ui', JSON.stringify({ aba: UI.aba, vista: UI.vista })); } catch (e) {}
+  salvarUI();
+  if (editou) agendarEnvio();
 }
+function salvarUI() { try { localStorage.setItem(STORAGE_KEY + '-ui', JSON.stringify({ aba: UI.aba, vista: UI.vista })); } catch (e) {} }
 
 /* ================= Datas do plano ================= */
 const inicioSeg = () => monday(pd(S.config.inicio));
@@ -686,6 +700,7 @@ function renderTopo() {
     <div class="topo-dir">
       <button class="contagem" id="btnCal" title="Calendário e data da prova"><span class="n">${n}</span><span class="l">${l}</span></button>
       <label class="horas" title="Horas de estudo por dia"><input type="number" id="inHoras" min="0.5" max="16" step="0.5" value="${c.horasDia}" aria-label="Horas por dia">h/dia</label>
+      ${syncHtml()}
       <button class="ico" id="btnConfig" title="Configurações e backup" aria-label="Configurações">⚙</button>
       <div class="pop ${UI.calOpen ? 'open' : ''}" id="calPop">${renderCal()}
         <div class="campos">
@@ -1021,7 +1036,7 @@ function modalConfig() {
     </form>
     <div class="modal-f"><button class="btn ghost" data-acao="fechar">Cancelar</button><button class="btn" data-acao="salvarCfgRegen">Salvar e regerar</button><button class="btn pri" data-acao="salvarCfg">Salvar</button></div>
     <div class="modal-sec"><p class="eyebrow" style="margin-bottom:10px">Backup</p>
-      <div class="row"><button class="btn" id="btnExport">Exportar JSON</button><button class="btn" id="btnImport">Importar JSON</button><span class="spacer"></span><button class="btn ghost danger" data-acao="reset" title="Recarrega o JSON embutido no arquivo">Restaurar dados do arquivo</button></div>
+      <div class="row"><button class="btn" data-acao="sync">Sincronização</button><button class="btn" id="btnExport">Exportar JSON</button><button class="btn" id="btnImport">Importar JSON</button><span class="spacer"></span><button class="btn ghost danger" data-acao="reset" title="Recarrega o JSON embutido no arquivo">Restaurar dados do arquivo</button></div>
     </div>`);
 }
 function lerConfig() {
@@ -1066,11 +1081,12 @@ document.addEventListener('click', ev => {
   if (t.id === 'btnCal') { UI.calOpen = !UI.calOpen; $('#calPop').classList.toggle('open', UI.calOpen); return; }
   if (d.cal) { const b = UI.calMes || (S.config.prova ? pd(S.config.prova) : new Date()); UI.calMes = new Date(b.getFullYear(), b.getMonth() + (+d.cal), 1); const campos = $('#calPop .campos').outerHTML; $('#calPop').innerHTML = renderCal() + campos; return; }
   if (t.id === 'btnConfig') return modalConfig();
+  if (t.id === 'btnSync') return modalSync();
   if (t.id === 'btnExport') return exportar();
   if (t.id === 'btnImport') return $('#fileImport').click();
-  if (d.aba) { UI.aba = d.aba; salvar(); window.scrollTo({ top: 0 }); return render(); }
+  if (d.aba) { UI.aba = d.aba; salvarUI(); window.scrollTo({ top: 0 }); return render(); }
   if (d.sem) { UI.semana = +d.sem; UI.aberto = null; return render(); }
-  if (d.vista) { UI.vista = d.vista; salvar(); return render(); }
+  if (d.vista) { UI.vista = d.vista; salvarUI(); return render(); }
   if (d.dia) { UI.aberto = diaAberto(d.dia, semanaDe(d.dia)) ? '' : d.dia; return render(); }
   if (d.check) {
     const k = S.cards.find(k => k.id === d.check);
@@ -1094,6 +1110,10 @@ document.addEventListener('click', ev => {
   if (d.delpar !== undefined) { lerConfig(); S.config.paresProibidos.splice(+d.delpar, 1); return modalConfig(); }
   switch (d.acao) {
     case 'fechar': return fecharModal();
+    case 'sync': return modalSync();
+    case 'syncAgora': puxar(); return;
+    case 'syncSair': if (confirmar('Sair da sincronização neste aparelho? O progresso continua salvo aqui e na nuvem.')) { SY.cli?.auth.signOut(); fecharModal(); } return;
+    case 'syncOutroEmail': SY.linkEnviado = null; return modalSync();
     case 'ocultarAviso': S.meta.avisoOculto = true; salvar(); return render();
     case 'regerar':
       if (confirmar('Regerar o cronograma? Os blocos automáticos são redistribuídos e os status reiniciados. Tópicos criados por você e registros de horas ficam.')) { gerarCronograma(); S.meta.avisoOculto = true; salvar(); render(); toast('Cronograma regerado.'); }
@@ -1294,8 +1314,129 @@ function pomoMudanca(t) {
 }
 setInterval(() => { if (!P.rodando) return; if (restanteAgora() <= 0) concluirFase(true); else atualizarRelogio(); }, 500);
 
+/* ================= Sincronização (Supabase) =================
+   O app continua salvando no navegador. Com o Supabase configurado e a pessoa logada,
+   cada alteração também vai para a tabela estado_estudos (uma linha por usuária).
+   Regra de conflito: vale a versão mais nova; se os dois lados mudaram desde o último sync, pergunta. */
+const SYNC_KEY = STORAGE_KEY + '-sync';
+const SUPABASE_LIB = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js';
+const SY = { cli: null, user: null, estado: 'off', msg: '', timer: null, puxando: false, denovo: false, linkEnviado: null };
+function syncCfg() {
+  try { const x = JSON.parse(localStorage.getItem(SYNC_KEY) || 'null'); if (x && x.url && x.chave) return x; } catch (e) {}
+  return SUPABASE_PADRAO.url && SUPABASE_PADRAO.chave ? SUPABASE_PADRAO : null;
+}
+function carregarLib() {
+  return new Promise((ok, falha) => {
+    if (window.supabase?.createClient) return ok();
+    const s = document.createElement('script'); s.src = SUPABASE_LIB; s.onload = ok; s.onerror = falha; document.head.append(s);
+  });
+}
+async function iniciarSync() {
+  const c = syncCfg();
+  if (!c) { SY.estado = 'off'; return renderSync(); }
+  if (location.protocol === 'file:') { SY.estado = 'erro'; SY.msg = 'A sincronização funciona no link do GitHub Pages, não no arquivo aberto do computador.'; return renderSync(); }
+  try { await carregarLib(); } catch (e) { SY.estado = 'offline'; SY.msg = 'Não consegui carregar o Supabase. Está sem internet?'; return renderSync(); }
+  SY.cli = window.supabase.createClient(c.url, c.chave, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, flowType: 'implicit', storageKey: STORAGE_KEY + '-auth' } });
+  SY.cli.auth.onAuthStateChange((ev, sess) => {
+    const u = sess?.user || null, mudou = (u && u.id) !== (SY.user && SY.user.id);
+    SY.user = u;
+    if (!u) { SY.estado = 'entrar'; renderSync(); }
+    else if (mudou) { if (ev === 'SIGNED_IN' && $('#modal').open && $('#syncModal')) fecharModal(); setTimeout(puxar, 0); }
+  });
+}
+async function puxar() {
+  if (!SY.cli || !SY.user) return;
+  if (SY.puxando) { SY.denovo = true; return; }
+  SY.puxando = true; clearTimeout(SY.timer);
+  try {
+    SY.estado = 'salvando'; renderSync();
+    const { data, error } = await SY.cli.from('estado_estudos').select('dados, atualizado').eq('user_id', SY.user.id).maybeSingle();
+    if (error) throw error;
+    const base = S.meta.sincEm || 0, local = S.meta.atualizadoEm || 0, sujo = local > base;
+    if (!data) await enviar();
+    else if (data.atualizado > base && data.atualizado !== local) {
+      const remoto = !sujo || confirmar('Este aparelho e outro têm mudanças diferentes desde a última sincronização.\n\nOK = ficar com a versão salva na nuvem (do outro aparelho)\nCancelar = ficar com a versão deste aparelho');
+      if (remoto) aplicarRemoto(data); else await enviar();
+    } else if (sujo) await enviar();
+    SY.estado = 'ok'; SY.msg = '';
+  } catch (e) {
+    SY.estado = navigator.onLine === false ? 'offline' : 'erro';
+    SY.msg = /estado_estudos|relation|schema cache/i.test(e.message || '') ? 'A tabela estado_estudos não existe no Supabase. Rode o SQL do README.' : (e.message || 'Erro desconhecido');
+  }
+  SY.puxando = false; renderSync();
+  if (SY.denovo) { SY.denovo = false; puxar(); }
+}
+async function enviar() {
+  const ts = S.meta.atualizadoEm || Date.now(); S.meta.atualizadoEm = ts;
+  const { error } = await SY.cli.from('estado_estudos').upsert({ user_id: SY.user.id, dados: S, atualizado: ts });
+  if (error) throw error;
+  S.meta.sincEm = ts; salvar(false);
+}
+function aplicarRemoto(data) {
+  const d = data.dados || {};
+  if (!d.config || !Array.isArray(d.materias)) return;
+  S = d; S.cards ||= []; S.registros ||= []; S.meta ||= {};
+  S.meta.sincEm = data.atualizado; S.meta.atualizadoEm = data.atualizado;
+  salvar(false); render(); renderPomo(); toast('Progresso atualizado da nuvem.');
+}
+function agendarEnvio() {
+  if (!SY.user) return;
+  SY.estado = 'salvando'; renderSync();
+  clearTimeout(SY.timer); SY.timer = setTimeout(puxar, 1500);
+}
+document.addEventListener('visibilitychange', () => { if (!document.hidden) puxar(); });
+window.addEventListener('online', () => puxar());
+
+const SYNC_LBL = { entrar: 'Sincronizar', ok: 'Sincronizado', salvando: 'Salvando…', erro: 'Erro ao sincronizar', offline: 'Offline' };
+function syncHtml() {
+  if (SY.estado === 'off') return '';
+  return `<button class="sync s-${SY.estado}" id="btnSync" title="${esc(SY.msg || (SY.user ? 'Conectada como ' + SY.user.email : 'Entrar para sincronizar entre aparelhos'))}"><span class="sdot"></span>${SYNC_LBL[SY.estado]}</button>`;
+}
+function renderSync() {
+  const b = $('#btnSync'), novo = syncHtml();
+  if (b) { if (novo) b.outerHTML = novo; else b.remove(); }
+  else if (novo) $('#btnConfig')?.insertAdjacentHTML('beforebegin', novo);
+  if ($('#syncModal')) modalSync();
+}
+function modalSync() {
+  const c = syncCfg();
+  let corpo;
+  if (!c) corpo = `<p class="muted">Cole a URL do projeto e a chave pública (anon ou publishable) do Supabase. Elas ficam salvas neste navegador.</p>`;
+  else if (!SY.user) corpo = SY.linkEnviado
+    ? `<p>Enviei um link para <b>${esc(SY.linkEnviado)}</b>. Abra o e-mail <b>neste aparelho</b> e toque no link: o app volta já conectado.</p><div class="modal-f"><button class="btn ghost" data-acao="syncOutroEmail">Usar outro e-mail</button><button class="btn pri" data-acao="fechar">Ok</button></div>`
+    : `<p class="muted">Entre com seu e-mail para o progresso ficar igual em todos os aparelhos. Você recebe um link de acesso, sem senha.</p>
+       <form id="formLogin" class="row" style="margin-top:14px"><input type="email" id="syncEmail" required placeholder="seu@email.com" style="flex:1;min-width:200px" autocomplete="email"><button class="btn pri" type="submit">Enviar link</button></form>`;
+  else corpo = `<p>Conectada como <b>${esc(SY.user.email)}</b>.</p>
+      <p class="small muted" style="margin-top:6px">${SY.estado === 'ok' ? 'Tudo sincronizado.' : esc(SY.msg || SYNC_LBL[SY.estado] || '')}${S.meta.sincEm ? ` Última sincronização: ${new Date(S.meta.sincEm).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}.` : ''}</p>
+      <div class="modal-f"><button class="btn ghost" data-acao="syncSair">Sair</button><button class="btn pri" data-acao="syncAgora">Sincronizar agora</button></div>`;
+  abrirModal(`<div id="syncModal"><h2>Sincronização</h2>${corpo}
+    ${SY.estado === 'erro' && SY.msg && !SY.user ? `<p class="small" style="color:var(--bad);margin-top:12px">${esc(SY.msg)}</p>` : ''}
+    <details class="modal-sec" ${c ? '' : 'open'}><summary class="small muted" style="cursor:pointer">Projeto Supabase</summary>
+      <form id="formSupa" class="form-grid" style="grid-template-columns:1fr;margin-top:12px">
+        <label>URL do projeto <input id="supaUrl" placeholder="https://xxxx.supabase.co" value="${esc(c?.url || '')}"></label>
+        <label>Chave pública (anon / publishable) <input id="supaChave" placeholder="eyJ… ou sb_publishable_…" value="${esc(c?.chave || '')}"></label>
+        <div class="row"><button class="btn" type="submit">Salvar projeto</button></div>
+      </form></details></div>`);
+  $('#formSupa').onsubmit = ev => {
+    ev.preventDefault();
+    const url = $('#supaUrl').value.trim().replace(/\/+$/, ''), chave = $('#supaChave').value.trim();
+    if (!/^https:\/\/.+/.test(url) || !chave) return toast('Preencha a URL (https://…) e a chave.');
+    try { localStorage.setItem(SYNC_KEY, JSON.stringify({ url, chave })); } catch (e) {}
+    toast('Projeto salvo. Recarregando…'); setTimeout(() => location.reload(), 600);
+  };
+  const fl = $('#formLogin');
+  if (fl) fl.onsubmit = async ev => {
+    ev.preventDefault();
+    if (!SY.cli) return toast(SY.msg || 'A sincronização ainda não carregou.');
+    const email = $('#syncEmail').value.trim(), btn = fl.querySelector('button'); btn.disabled = true; btn.textContent = 'Enviando…';
+    const { error } = await SY.cli.auth.signInWithOtp({ email, options: { emailRedirectTo: location.origin + location.pathname } });
+    if (error) { btn.disabled = false; btn.textContent = 'Enviar link'; return toast('Não deu para enviar: ' + error.message, 5000); }
+    SY.linkEnviado = email; modalSync();
+  };
+}
+
 /* Início */
-carregar(); carregarP(); salvar(); render(); renderPomo();
+carregar(); carregarP(); salvar(false); render(); renderPomo(); iniciarSync();
 </script>
 </body>
 </html>

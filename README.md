@@ -18,5 +18,17 @@ Também dá para adicionar matérias, assuntos e tópicos direto pelo app, sem m
 - **⬇ Exportar** baixa um `.json` com tudo (plano, status, registros de horas).
 - **⬆ Importar** carrega esse arquivo de volta (em outro navegador ou computador, por exemplo).
 
+## Sincronizar entre aparelhos (Supabase, opcional)
+Sem isso o progresso fica só no navegador. Com isso, fica igual no celular e no computador.
+
+1. **Tabela:** no Supabase, abra *SQL Editor → New query*, cole o conteúdo de `supabase.sql` e clique em *Run*.
+2. **Endereço do app:** em *Authentication → URL Configuration*, coloque `https://leandranb.github.io/estudos/` em *Site URL* e também em *Redirect URLs*.
+3. **Chaves:** em *Project Settings → API* (ou *API Keys*), copie a **Project URL** e a chave **anon / publishable**. Nunca use a `service_role`/`secret`.
+4. **No app** (pelo link do GitHub Pages): ⚙ → *Sincronização* → *Projeto Supabase*, cole URL e chave e salve. Ou deixe fixo no arquivo, em `SUPABASE_PADRAO` no começo do script.
+5. Clique em **Sincronizar** no topo, digite seu e-mail e abra o link que chegar **no mesmo aparelho**. Repita o login em cada aparelho.
+6. Depois de criar sua conta, dá para fechar novos cadastros em *Authentication → Sign In / Providers → Allow new users to sign up* (desligado).
+
+Cada alteração é enviada ~1,5 s depois; ao voltar para a aba, o app busca o que há de mais novo. Se os dois aparelhos mudaram ao mesmo tempo, o app pergunta qual versão manter. O estado do pomodoro em andamento continua local.
+
 ## Prompt
 O prompt usado para gerar a análise do edital (Etapa 1) está em `PROMPT.md`.
