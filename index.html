@@ -319,94 +319,1089 @@ dialog::backdrop{background:rgba(30,25,15,.32);backdrop-filter:blur(2px)}
 -->
 <script id="dados-iniciais" type="application/json">
 {
-  "versao": 1,
-  "config": {
-    "exemplo": true,
-    "concurso": "EXEMPLO — Analista (Área Administrativa)",
-    "banca": "a definir",
-    "edital": "Dados ilustrativos. Envie o edital para gerar a análise real.",
-    "inicio": "2026-11-09",
-    "prova": null,
-    "semanas": 16,
-    "horasDia": 4,
-    "maxDisciplinasDia": 3,
-    "discursiva": true,
-    "redacaoMin": 60,
-    "paresProibidos": [["port", "info"]],
-    "revisoesDias": [1, 7, 30]
-  },
-  "premissas": [
-    "Relevância de cada matéria = nº de questões × peso × multiplicador de incidência (alta 3, média 2, baixa 1).",
-    "Dentro da matéria, o tempo de cada assunto é proporcional à sua incidência.",
-    "Segunda a sábado: conteúdo novo; sábado inclui redação; domingo: simulado e revisão.",
-    "Última semana: 100% revisão.",
-    "Incidências deste exemplo são ESTIMADAS e servem apenas para demonstrar o app."
+ "versao": 2,
+ "config": {
+  "exemplo": false,
+  "concurso": "SEFAZ ES — Auditor Fiscal da Receita Estadual",
+  "banca": "FGV (referência)",
+  "edital": "Edital nº 01/2021 (FGV) como referência até o novo edital sair.",
+  "inicio": "2026-12-01",
+  "prova": null,
+  "semanas": 26,
+  "horasDia": 4,
+  "maxDisciplinasDia": 3,
+  "discursiva": true,
+  "redacaoMin": 60,
+  "discursivaTitulo": "Discursiva — estudo de caso tributário (ICMS)",
+  "paresProibidos": [
+   [
+    "cac",
+    "rlm"
+   ],
+   [
+    "civ",
+    "emp"
+   ]
   ],
-  "materias": [
-    {"id":"port","nome":"Língua Portuguesa","cor":"#6E86A8","questoes":15,"peso":1,"incidencia":"alta","assuntos":[
-      {"id":"port1","nome":"Compreensão e interpretação de textos","incidencia":"alta"},
-      {"id":"port2","nome":"Tipologia e gêneros textuais","incidencia":"media"},
-      {"id":"port3","nome":"Ortografia oficial","incidencia":"baixa"},
-      {"id":"port4","nome":"Acentuação gráfica","incidencia":"baixa"},
-      {"id":"port5","nome":"Classes de palavras","incidencia":"media"},
-      {"id":"port6","nome":"Concordância verbal e nominal","incidencia":"alta"},
-      {"id":"port7","nome":"Regência verbal e nominal","incidencia":"alta"},
-      {"id":"port8","nome":"Crase","incidencia":"alta"},
-      {"id":"port9","nome":"Colocação pronominal","incidencia":"media"},
-      {"id":"port10","nome":"Pontuação","incidencia":"alta"},
-      {"id":"port11","nome":"Sintaxe da oração e do período","incidencia":"media"},
-      {"id":"port12","nome":"Reescrita de frases e parágrafos","incidencia":"alta"}
-    ]},
-    {"id":"rlm","nome":"Raciocínio Lógico-Matemático","cor":"#5F949A","questoes":10,"peso":1,"incidencia":"media","assuntos":[
-      {"id":"rlm1","nome":"Proposições e conectivos","incidencia":"alta"},
-      {"id":"rlm2","nome":"Equivalências e negações","incidencia":"alta"},
-      {"id":"rlm3","nome":"Argumentação lógica","incidencia":"media"},
-      {"id":"rlm4","nome":"Conjuntos","incidencia":"media"},
-      {"id":"rlm5","nome":"Análise combinatória","incidencia":"media"},
-      {"id":"rlm6","nome":"Probabilidade","incidencia":"media"},
-      {"id":"rlm7","nome":"Porcentagem, razão e proporção","incidencia":"alta"},
-      {"id":"rlm8","nome":"Sequências lógicas","incidencia":"baixa"}
-    ]},
-    {"id":"info","nome":"Noções de Informática","cor":"#C08A64","questoes":10,"peso":1,"incidencia":"media","assuntos":[
-      {"id":"info1","nome":"Windows 10/11","incidencia":"media"},
-      {"id":"info2","nome":"Pacote Microsoft Office","incidencia":"alta"},
-      {"id":"info3","nome":"Internet e navegadores","incidencia":"media"},
-      {"id":"info4","nome":"Correio eletrônico","incidencia":"baixa"},
-      {"id":"info5","nome":"Segurança da informação","incidencia":"alta"},
-      {"id":"info6","nome":"Computação em nuvem","incidencia":"baixa"},
-      {"id":"info7","nome":"Redes de computadores","incidencia":"baixa"}
-    ]},
-    {"id":"const","nome":"Direito Constitucional","cor":"#A9756F","questoes":15,"peso":2,"incidencia":"alta","assuntos":[
-      {"id":"const1","nome":"Princípios fundamentais","incidencia":"media"},
-      {"id":"const2","nome":"Direitos e garantias fundamentais","incidencia":"alta"},
-      {"id":"const3","nome":"Organização do Estado","incidencia":"media"},
-      {"id":"const4","nome":"Organização dos Poderes","incidencia":"alta"},
-      {"id":"const5","nome":"Administração Pública (arts. 37 a 41)","incidencia":"alta"},
-      {"id":"const6","nome":"Poder Judiciário","incidencia":"alta"},
-      {"id":"const7","nome":"Funções essenciais à Justiça","incidencia":"baixa"}
-    ]},
-    {"id":"adm","nome":"Direito Administrativo","cor":"#9A7BA6","questoes":15,"peso":2,"incidencia":"alta","assuntos":[
-      {"id":"adm1","nome":"Princípios da Administração Pública","incidencia":"alta"},
-      {"id":"adm2","nome":"Organização administrativa","incidencia":"media"},
-      {"id":"adm3","nome":"Atos administrativos","incidencia":"alta"},
-      {"id":"adm4","nome":"Poderes administrativos","incidencia":"media"},
-      {"id":"adm5","nome":"Agentes públicos — Lei 8.112/1990","incidencia":"alta"},
-      {"id":"adm6","nome":"Licitações e contratos — Lei 14.133/2021","incidencia":"alta"},
-      {"id":"adm7","nome":"Responsabilidade civil do Estado","incidencia":"media"},
-      {"id":"adm8","nome":"Controle da Administração","incidencia":"baixa"},
-      {"id":"adm9","nome":"Improbidade administrativa","incidencia":"media"}
-    ]},
-    {"id":"gest","nome":"Administração Pública e Gestão","cor":"#6B9A84","questoes":15,"peso":2,"incidencia":"media","assuntos":[
-      {"id":"gest1","nome":"Planejamento estratégico","incidencia":"media"},
-      {"id":"gest2","nome":"Gestão de pessoas","incidencia":"media"},
-      {"id":"gest3","nome":"Gestão de processos","incidencia":"media"},
-      {"id":"gest4","nome":"Gestão de projetos","incidencia":"baixa"},
-      {"id":"gest5","nome":"Governança e compliance","incidencia":"media"},
-      {"id":"gest6","nome":"Orçamento público","incidencia":"alta"},
-      {"id":"gest7","nome":"Gestão de contratos","incidencia":"media"}
-    ]}
+  "revisoesDias": [
+   1,
+   7,
+   30
   ]
+ },
+ "premissas": [
+  "Base: Edital nº 01/2021 (FGV) da Sefaz ES. Novo concurso previsto na LOA 2026, sem edital e sem banca definidos; ajustar quando sair.",
+  "Prova objetiva: 50 questões de Conhecimentos Gerais (peso 1) + 60 de Específicos (peso 2) = 170 pontos. Mínimos: 25 em Gerais, 60 em Específicos e 102 no total.",
+  "Discursiva: 1 questão de conhecimento específico, 0 a 30 pontos, mínimo 12. Em 2021 foi um estudo de caso de autuação de ICMS. Por isso o sábado tem treino de discursiva tributária.",
+  "Relevância de cada matéria = questões × peso × incidência (alta 3, média 2, baixa 1). Dentro da matéria, tempo proporcional à incidência do assunto.",
+  "Incidência: estimada a partir da prova FGV 2021 da Sefaz ES (Legislação do ES ~13% das questões; Balanço Patrimonial ~5%; testes e procedimentos de auditoria ~4%) e do padrão da FGV na área fiscal (ICMS, crédito, obrigação e responsabilidade tributária no topo). Marcar como estimado.",
+  "Pares que não caem no mesmo dia: Contabilidade Avançada e de Custos × Raciocínio Lógico e Matemática Financeira (cálculo pesado) e Direito Civil e Penal × Direito Empresarial (códigos que se confundem).",
+  "Segunda a sábado: conteúdo novo. Domingo: simulado e revisão. Última semana: 100% revisão."
+ ],
+ "materias": [
+  {
+   "id": "port",
+   "nome": "Língua Portuguesa",
+   "cor": "#6E86A8",
+   "questoes": 10,
+   "peso": 1,
+   "incidencia": "alta",
+   "assuntos": [
+    {
+     "id": "port1",
+     "nome": "Interpretação e compreensão de texto",
+     "incidencia": "alta"
+    },
+    {
+     "id": "port2",
+     "nome": "Ortografia oficial",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "port3",
+     "nome": "Acentuação gráfica",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "port4",
+     "nome": "Pontuação",
+     "incidencia": "alta"
+    },
+    {
+     "id": "port5",
+     "nome": "Classes de palavras: emprego e sentido nas relações",
+     "incidencia": "media"
+    },
+    {
+     "id": "port6",
+     "nome": "Vozes verbais",
+     "incidencia": "media"
+    },
+    {
+     "id": "port7",
+     "nome": "Concordância verbal e nominal",
+     "incidencia": "alta"
+    },
+    {
+     "id": "port8",
+     "nome": "Regência verbal e nominal",
+     "incidencia": "media"
+    },
+    {
+     "id": "port9",
+     "nome": "Sintaxe: coordenação e subordinação",
+     "incidencia": "media"
+    },
+    {
+     "id": "port10",
+     "nome": "Crase",
+     "incidencia": "media"
+    },
+    {
+     "id": "port11",
+     "nome": "Vocabulário: sinônimos, antônimos, sentido próprio e figurado",
+     "incidencia": "media"
+    },
+    {
+     "id": "port12",
+     "nome": "Escritura (reescrita) de frases",
+     "incidencia": "alta"
+    },
+    {
+     "id": "port13",
+     "nome": "Tipos de texto e modos de organização discursiva",
+     "incidencia": "media"
+    },
+    {
+     "id": "port14",
+     "nome": "Características básicas dos textos",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "port15",
+     "nome": "Uso do dicionário",
+     "incidencia": "baixa"
+    }
+   ]
+  },
+  {
+   "id": "rlm",
+   "nome": "Raciocínio Lógico e Matemática Financeira",
+   "cor": "#5F949A",
+   "questoes": 6,
+   "peso": 1,
+   "incidencia": "media",
+   "assuntos": [
+    {
+     "id": "rlm1",
+     "nome": "Proposições e conectivos",
+     "incidencia": "media"
+    },
+    {
+     "id": "rlm2",
+     "nome": "Equivalências lógicas",
+     "incidencia": "alta"
+    },
+    {
+     "id": "rlm3",
+     "nome": "Argumentos",
+     "incidencia": "media"
+    },
+    {
+     "id": "rlm4",
+     "nome": "Diagramas e conjuntos",
+     "incidencia": "media"
+    },
+    {
+     "id": "rlm5",
+     "nome": "Juros simples: montante, taxas e capitais equivalentes",
+     "incidencia": "media"
+    },
+    {
+     "id": "rlm6",
+     "nome": "Juros compostos: taxa real, efetiva, taxas e capitais equivalentes",
+     "incidencia": "alta"
+    },
+    {
+     "id": "rlm7",
+     "nome": "Capitalização contínua",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "rlm8",
+     "nome": "Descontos simples e composto (racional e comercial)",
+     "incidencia": "media"
+    },
+    {
+     "id": "rlm9",
+     "nome": "Amortização: sistema francês, SAC e misto",
+     "incidencia": "alta"
+    },
+    {
+     "id": "rlm10",
+     "nome": "Fluxo de caixa, valor atual e TIR",
+     "incidencia": "media"
+    }
+   ]
+  },
+  {
+   "id": "emp",
+   "nome": "Direito Empresarial",
+   "cor": "#B9A15C",
+   "questoes": 6,
+   "peso": 1,
+   "incidencia": "media",
+   "assuntos": [
+    {
+     "id": "emp1",
+     "nome": "Empresa e empresário: conceito, inscrição, capacidade, rural; sociedade empresária × simples",
+     "incidencia": "alta"
+    },
+    {
+     "id": "emp2",
+     "nome": "Sociedade: disposições gerais e desconsideração da personalidade jurídica",
+     "incidencia": "media"
+    },
+    {
+     "id": "emp3",
+     "nome": "Sociedades não personificadas: em comum e em conta de participação",
+     "incidencia": "media"
+    },
+    {
+     "id": "emp4",
+     "nome": "Sociedade simples, em nome coletivo e em comandita simples",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "emp5",
+     "nome": "Sociedade limitada e EIRELI",
+     "incidencia": "alta"
+    },
+    {
+     "id": "emp6",
+     "nome": "Sociedades por ações (Lei 6.404/76) e comandita por ações",
+     "incidencia": "media"
+    },
+    {
+     "id": "emp7",
+     "nome": "Sociedade cooperativa",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "emp8",
+     "nome": "Sociedades coligadas e controladas",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "emp9",
+     "nome": "Dissolução, liquidação, extinção; transformação, incorporação, fusão e cisão",
+     "incidencia": "media"
+    },
+    {
+     "id": "emp10",
+     "nome": "Sociedade dependente de autorização",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "emp11",
+     "nome": "Estabelecimento",
+     "incidencia": "media"
+    },
+    {
+     "id": "emp12",
+     "nome": "Registro empresarial, nome empresarial, prepostos e escrituração",
+     "incidencia": "media"
+    },
+    {
+     "id": "emp13",
+     "nome": "LC 123/2006: MEI, pequeno empresário, ME e EPP",
+     "incidencia": "media"
+    },
+    {
+     "id": "emp14",
+     "nome": "Títulos de crédito: saque, aceite, endosso, aval, protesto, nota promissória e duplicata",
+     "incidencia": "alta"
+    },
+    {
+     "id": "emp15",
+     "nome": "Recuperação judicial e extrajudicial e falência (Lei 11.101/2005); parcelamento",
+     "incidencia": "alta"
+    }
+   ]
+  },
+  {
+   "id": "const",
+   "nome": "Direito Constitucional",
+   "cor": "#A9756F",
+   "questoes": 6,
+   "peso": 1,
+   "incidencia": "media",
+   "assuntos": [
+    {
+     "id": "const1",
+     "nome": "Teoria do Estado e Estado Democrático de Direito",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "const2",
+     "nome": "Constituição: conceito, tipos, interpretação e normas",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "const3",
+     "nome": "Poder constituinte originário e derivado",
+     "incidencia": "media"
+    },
+    {
+     "id": "const4",
+     "nome": "Controle de constitucionalidade (ADI, ADC, ADO, ADPF, TJ)",
+     "incidencia": "alta"
+    },
+    {
+     "id": "const5",
+     "nome": "Princípios fundamentais",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "const6",
+     "nome": "Direitos e deveres individuais e coletivos",
+     "incidencia": "alta"
+    },
+    {
+     "id": "const7",
+     "nome": "Remédios constitucionais (HC, MS, MI, HD, ação popular, ACP, petição)",
+     "incidencia": "media"
+    },
+    {
+     "id": "const8",
+     "nome": "Direitos sociais, nacionalidade e direitos políticos",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "const9",
+     "nome": "Organização do Estado, federalismo e intervenção",
+     "incidencia": "media"
+    },
+    {
+     "id": "const10",
+     "nome": "Administração pública e servidores públicos",
+     "incidencia": "media"
+    },
+    {
+     "id": "const11",
+     "nome": "Poderes, processo legislativo e sistemas de governo",
+     "incidencia": "media"
+    },
+    {
+     "id": "const12",
+     "nome": "Ministério Público e funções essenciais à justiça",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "const13",
+     "nome": "Sistema Tributário Nacional e repartição de receitas",
+     "incidencia": "alta"
+    },
+    {
+     "id": "const14",
+     "nome": "Orçamento e finanças públicas",
+     "incidencia": "media"
+    },
+    {
+     "id": "const15",
+     "nome": "Ordem econômica e financeira e ordem social",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "const16",
+     "nome": "Constituição do Estado do Espírito Santo",
+     "incidencia": "media"
+    }
+   ]
+  },
+  {
+   "id": "adm",
+   "nome": "Direito Administrativo",
+   "cor": "#9A7BA6",
+   "questoes": 6,
+   "peso": 1,
+   "incidencia": "media",
+   "assuntos": [
+    {
+     "id": "adm1",
+     "nome": "Princípios de Direito Administrativo",
+     "incidencia": "media"
+    },
+    {
+     "id": "adm2",
+     "nome": "Atos administrativos",
+     "incidencia": "alta"
+    },
+    {
+     "id": "adm3",
+     "nome": "Poderes administrativos",
+     "incidencia": "media"
+    },
+    {
+     "id": "adm4",
+     "nome": "Organização administrativa: direta e indireta",
+     "incidencia": "media"
+    },
+    {
+     "id": "adm5",
+     "nome": "Licitações e contratos (Lei 14.133/2021, 8.666/93, pregão, RDC, Lei 13.979/2020)",
+     "incidencia": "alta"
+    },
+    {
+     "id": "adm6",
+     "nome": "Parcerias voluntárias (Lei 13.019/2014) e terceiro setor",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "adm7",
+     "nome": "Processo administrativo",
+     "incidencia": "media"
+    },
+    {
+     "id": "adm8",
+     "nome": "Agentes públicos e regime dos servidores do ES (LC 46/1994)",
+     "incidencia": "alta"
+    },
+    {
+     "id": "adm9",
+     "nome": "Intervenção do Estado na propriedade e no domínio econômico",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "adm10",
+     "nome": "Bens públicos",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "adm11",
+     "nome": "Serviços públicos",
+     "incidencia": "media"
+    },
+    {
+     "id": "adm12",
+     "nome": "Responsabilidade civil do Estado",
+     "incidencia": "alta"
+    },
+    {
+     "id": "adm13",
+     "nome": "Controle da Administração e Tribunais de Contas",
+     "incidencia": "media"
+    },
+    {
+     "id": "adm14",
+     "nome": "Improbidade administrativa e Lei Anticorrupção (12.846/2013)",
+     "incidencia": "media"
+    },
+    {
+     "id": "adm15",
+     "nome": "Lei de Responsabilidade Fiscal (LC 101/2000)",
+     "incidencia": "media"
+    },
+    {
+     "id": "adm16",
+     "nome": "Lei de Acesso à Informação (12.527/2011)",
+     "incidencia": "baixa"
+    }
+   ]
+  },
+  {
+   "id": "civ",
+   "nome": "Direito Civil e Penal",
+   "cor": "#8E8B6E",
+   "questoes": 6,
+   "peso": 1,
+   "incidencia": "baixa",
+   "assuntos": [
+    {
+     "id": "civ1",
+     "nome": "LINDB: vigência, aplicação, integração e interpretação da lei",
+     "incidencia": "media"
+    },
+    {
+     "id": "civ2",
+     "nome": "Pessoas naturais: personalidade, capacidade e direitos da personalidade",
+     "incidencia": "media"
+    },
+    {
+     "id": "civ3",
+     "nome": "Pessoas jurídicas e domicílio",
+     "incidencia": "media"
+    },
+    {
+     "id": "civ4",
+     "nome": "Bens",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "civ5",
+     "nome": "Fatos e negócios jurídicos; atos lícitos e ilícitos",
+     "incidencia": "media"
+    },
+    {
+     "id": "civ6",
+     "nome": "Prescrição e decadência",
+     "incidencia": "alta"
+    },
+    {
+     "id": "civ7",
+     "nome": "Doação e atos unilaterais",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "civ8",
+     "nome": "Responsabilidade civil",
+     "incidencia": "media"
+    },
+    {
+     "id": "civ9",
+     "nome": "Direito das coisas",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "civ10",
+     "nome": "Direito de família (patrimonial) e sucessões",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "civ11",
+     "nome": "Lei penal no tempo e no espaço",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "civ12",
+     "nome": "Teoria do crime: tipicidade, ilicitude, culpabilidade, dolo, culpa e extinção da punibilidade",
+     "incidencia": "media"
+    },
+    {
+     "id": "civ13",
+     "nome": "Crimes contra a Administração Pública",
+     "incidencia": "alta"
+    },
+    {
+     "id": "civ14",
+     "nome": "Crimes contra a ordem tributária (Lei 8.137/1990)",
+     "incidencia": "alta"
+    }
+   ]
+  },
+  {
+   "id": "cg",
+   "nome": "Contabilidade Geral",
+   "cor": "#6B9A84",
+   "questoes": 10,
+   "peso": 1,
+   "incidencia": "alta",
+   "assuntos": [
+    {
+     "id": "cg1",
+     "nome": "Conceito, objeto, objetivos e usuários da informação contábil",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "cg2",
+     "nome": "Estrutura conceitual (CPC 00)",
+     "incidencia": "media"
+    },
+    {
+     "id": "cg3",
+     "nome": "Apuração de resultados; regime de caixa e de competência",
+     "incidencia": "media"
+    },
+    {
+     "id": "cg4",
+     "nome": "Componentes patrimoniais, fatos contábeis e variações",
+     "incidencia": "media"
+    },
+    {
+     "id": "cg5",
+     "nome": "Balanço Patrimonial: grupos, classificação e critérios de avaliação",
+     "incidencia": "alta"
+    },
+    {
+     "id": "cg6",
+     "nome": "DRE e Demonstração do Resultado Abrangente",
+     "incidencia": "alta"
+    },
+    {
+     "id": "cg7",
+     "nome": "DMPL",
+     "incidencia": "media"
+    },
+    {
+     "id": "cg8",
+     "nome": "Demonstração dos Fluxos de Caixa",
+     "incidencia": "media"
+    },
+    {
+     "id": "cg9",
+     "nome": "Demonstração do Valor Adicionado",
+     "incidencia": "media"
+    },
+    {
+     "id": "cg10",
+     "nome": "Demonstrações consolidadas",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "cg11",
+     "nome": "Investimento em controlada e coligada",
+     "incidencia": "media"
+    },
+    {
+     "id": "cg12",
+     "nome": "Redução ao valor recuperável",
+     "incidencia": "media"
+    },
+    {
+     "id": "cg13",
+     "nome": "Ativo imobilizado",
+     "incidencia": "alta"
+    },
+    {
+     "id": "cg14",
+     "nome": "Ativo intangível",
+     "incidencia": "media"
+    },
+    {
+     "id": "cg15",
+     "nome": "Notas explicativas",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "cg16",
+     "nome": "Provisões, depreciação, amortização e exaustão",
+     "incidencia": "alta"
+    },
+    {
+     "id": "cg17",
+     "nome": "Estoques: inventários, métodos de avaliação e CMV",
+     "incidencia": "alta"
+    },
+    {
+     "id": "cg18",
+     "nome": "Tributos nas operações de compra e venda",
+     "incidencia": "alta"
+    }
+   ]
+  },
+  {
+   "id": "dt",
+   "nome": "Direito Tributário",
+   "cor": "#C08A64",
+   "questoes": 15,
+   "peso": 2,
+   "incidencia": "alta",
+   "assuntos": [
+    {
+     "id": "dt1",
+     "nome": "Sistema Tributário na CF: princípios gerais e espécies tributárias",
+     "incidencia": "media"
+    },
+    {
+     "id": "dt2",
+     "nome": "Limitações ao poder de tributar e princípios constitucionais",
+     "incidencia": "alta"
+    },
+    {
+     "id": "dt3",
+     "nome": "Imunidades",
+     "incidencia": "alta"
+    },
+    {
+     "id": "dt4",
+     "nome": "Impostos da União, dos Estados/DF e dos Municípios",
+     "incidencia": "media"
+    },
+    {
+     "id": "dt5",
+     "nome": "Repartição das receitas tributárias",
+     "incidencia": "media"
+    },
+    {
+     "id": "dt6",
+     "nome": "CTN: competência tributária e suas limitações",
+     "incidencia": "media"
+    },
+    {
+     "id": "dt7",
+     "nome": "Impostos, taxas e contribuição de melhoria no CTN",
+     "incidencia": "media"
+    },
+    {
+     "id": "dt8",
+     "nome": "Legislação tributária: fontes, vigência, aplicação, interpretação e integração",
+     "incidencia": "alta"
+    },
+    {
+     "id": "dt9",
+     "nome": "Obrigação tributária: fato gerador e sujeito ativo",
+     "incidencia": "alta"
+    },
+    {
+     "id": "dt10",
+     "nome": "Sujeito passivo: solidariedade, capacidade e domicílio",
+     "incidencia": "media"
+    },
+    {
+     "id": "dt11",
+     "nome": "Responsabilidade tributária: sucessores, terceiros e infrações",
+     "incidencia": "alta"
+    },
+    {
+     "id": "dt12",
+     "nome": "Crédito tributário e lançamento",
+     "incidencia": "alta"
+    },
+    {
+     "id": "dt13",
+     "nome": "Suspensão da exigibilidade do crédito",
+     "incidencia": "alta"
+    },
+    {
+     "id": "dt14",
+     "nome": "Extinção do crédito: pagamento, indevido, decadência e prescrição",
+     "incidencia": "alta"
+    },
+    {
+     "id": "dt15",
+     "nome": "Exclusão do crédito: isenção e anistia",
+     "incidencia": "media"
+    },
+    {
+     "id": "dt16",
+     "nome": "Garantias e privilégios do crédito tributário",
+     "incidencia": "media"
+    },
+    {
+     "id": "dt17",
+     "nome": "Administração tributária: fiscalização, dívida ativa, protesto e certidões",
+     "incidencia": "media"
+    },
+    {
+     "id": "dt18",
+     "nome": "LC 87/1996 (Lei Kandir — ICMS)",
+     "incidencia": "alta"
+    },
+    {
+     "id": "dt19",
+     "nome": "LC 24/1975 e LC 160/2017 (convênios e benefícios de ICMS)",
+     "incidencia": "media"
+    },
+    {
+     "id": "dt20",
+     "nome": "LC 105/2001 (sigilo bancário)",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "dt21",
+     "nome": "LC 116/2003 (ISS)",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "dt22",
+     "nome": "Simples Nacional (LC 123/2006)",
+     "incidencia": "media"
+    }
+   ]
+  },
+  {
+   "id": "les",
+   "nome": "Legislação Tributária do ES",
+   "cor": "#C46F5E",
+   "questoes": 15,
+   "peso": 2,
+   "incidencia": "alta",
+   "assuntos": [
+    {
+     "id": "les1",
+     "nome": "ICMS (Lei 7.000/2001): incidência e não incidência",
+     "incidencia": "alta"
+    },
+    {
+     "id": "les2",
+     "nome": "ICMS: fato gerador, contribuintes e responsáveis",
+     "incidencia": "alta"
+    },
+    {
+     "id": "les3",
+     "nome": "ICMS: base de cálculo e alíquotas",
+     "incidencia": "alta"
+    },
+    {
+     "id": "les4",
+     "nome": "ICMS: substituição tributária",
+     "incidencia": "alta"
+    },
+    {
+     "id": "les5",
+     "nome": "ICMS: não cumulatividade, crédito e compensação",
+     "incidencia": "alta"
+    },
+    {
+     "id": "les6",
+     "nome": "ICMS: isenções, benefícios e regimes especiais",
+     "incidencia": "media"
+    },
+    {
+     "id": "les7",
+     "nome": "ICMS: obrigações acessórias, infrações e penalidades",
+     "incidencia": "alta"
+    },
+    {
+     "id": "les8",
+     "nome": "ITCMD (Lei 10.011/2013)",
+     "incidencia": "media"
+    },
+    {
+     "id": "les9",
+     "nome": "IPVA (Lei 6.999/2001)",
+     "incidencia": "media"
+    },
+    {
+     "id": "les10",
+     "nome": "Taxas estaduais (Lei 7.001/2001)",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "les11",
+     "nome": "Código de Direitos, Garantias e Obrigações do Contribuinte (LC 884/2018)",
+     "incidencia": "media"
+    },
+    {
+     "id": "les12",
+     "nome": "Regimento do Conselho Estadual de Recursos Fiscais (Decreto 1.353-R/2004)",
+     "incidencia": "baixa"
+    }
+   ]
+  },
+  {
+   "id": "cac",
+   "nome": "Contabilidade Avançada e de Custos",
+   "cor": "#7F8C5A",
+   "questoes": 10,
+   "peso": 2,
+   "incidencia": "media",
+   "assuntos": [
+    {
+     "id": "cac1",
+     "nome": "Contabilidade Geral aplicada (conteúdo integral)",
+     "incidencia": "media"
+    },
+    {
+     "id": "cac2",
+     "nome": "Provisões e contingências ativas e passivas (CPC 25)",
+     "incidencia": "alta"
+    },
+    {
+     "id": "cac3",
+     "nome": "Políticas contábeis, mudança de estimativa e retificação de erro",
+     "incidencia": "media"
+    },
+    {
+     "id": "cac4",
+     "nome": "Participações societárias: influência significativa, MEP, lucros não realizados e dividendos",
+     "incidencia": "alta"
+    },
+    {
+     "id": "cac5",
+     "nome": "Variação cambial, conversão de demonstrações e filiais no exterior",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "cac6",
+     "nome": "Reorganizações: incorporação, fusão, cisão e extinção",
+     "incidencia": "media"
+    },
+    {
+     "id": "cac7",
+     "nome": "Mais-valia, goodwill e deságio (compra vantajosa)",
+     "incidencia": "alta"
+    },
+    {
+     "id": "cac8",
+     "nome": "Redução ao valor recuperável: mensuração, registro e reversão",
+     "incidencia": "media"
+    },
+    {
+     "id": "cac9",
+     "nome": "Debêntures e partes beneficiárias",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "cac10",
+     "nome": "Arrendamento mercantil",
+     "incidencia": "media"
+    },
+    {
+     "id": "cac11",
+     "nome": "Mantido para venda, operação descontinuada e propriedade para investimento",
+     "incidencia": "media"
+    },
+    {
+     "id": "cac12",
+     "nome": "Intangível, ativo diferido e reservas de reavaliação",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "cac13",
+     "nome": "Valor justo e ajuste a valor presente",
+     "incidencia": "media"
+    },
+    {
+     "id": "cac14",
+     "nome": "Subvenção e assistência governamentais",
+     "incidencia": "media"
+    },
+    {
+     "id": "cac15",
+     "nome": "Custos: conceitos, classificação, sistemas e métodos de custeio",
+     "incidencia": "media"
+    },
+    {
+     "id": "cac16",
+     "nome": "Custeio por absorção × custeio variável",
+     "incidencia": "alta"
+    },
+    {
+     "id": "cac17",
+     "nome": "Materiais diretos, mão de obra, CIF e critérios de rateio",
+     "incidencia": "media"
+    },
+    {
+     "id": "cac18",
+     "nome": "Custeio por ordem e por processo; produção conjunta, coprodutos, subprodutos e sucatas",
+     "incidencia": "media"
+    },
+    {
+     "id": "cac19",
+     "nome": "Margem de contribuição, custo-volume-lucro e pontos de equilíbrio",
+     "incidencia": "alta"
+    },
+    {
+     "id": "cac20",
+     "nome": "Custeio baseado em atividades (ABC)",
+     "incidencia": "media"
+    }
+   ]
+  },
+  {
+   "id": "ti",
+   "nome": "TI aplicada à Auditoria Tributária",
+   "cor": "#5C7FB0",
+   "questoes": 10,
+   "peso": 2,
+   "incidencia": "media",
+   "assuntos": [
+    {
+     "id": "ti1",
+     "nome": "SGBD e modelo relacional",
+     "incidencia": "media"
+    },
+    {
+     "id": "ti2",
+     "nome": "Modelagem de dados: entidades, atributos, relacionamentos, cardinalidade, tabelas, views e chaves",
+     "incidencia": "alta"
+    },
+    {
+     "id": "ti3",
+     "nome": "SQL: consultas, WHERE, operadores, LIKE, IN, ordenação, agrupamento e JOINs",
+     "incidencia": "alta"
+    },
+    {
+     "id": "ti4",
+     "nome": "EFD ICMS/IPI: estrutura e registros (0000, 0150, 0200, 0220, C100, C170, C176, C195, C197, C400 a C425, blocos E e H)",
+     "incidencia": "alta"
+    },
+    {
+     "id": "ti5",
+     "nome": "NF-e: arquivo XML, grupos B, C, D, H, I, M, N, W e relação com a EFD",
+     "incidencia": "alta"
+    },
+    {
+     "id": "ti6",
+     "nome": "Data Warehouse, Data Mining, Big Data e BI",
+     "incidencia": "media"
+    },
+    {
+     "id": "ti7",
+     "nome": "GED, portais corporativos e Web Services",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "ti8",
+     "nome": "Governança de TI: COBIT 5",
+     "incidencia": "media"
+    },
+    {
+     "id": "ti9",
+     "nome": "Engenharia de software: ciclo de vida e metodologias",
+     "incidencia": "media"
+    },
+    {
+     "id": "ti10",
+     "nome": "Métricas: análise por pontos de função",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "ti11",
+     "nome": "Qualidade de software: CMMI 1.3 e MPS.BR",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "ti12",
+     "nome": "Segurança da informação: SGSI, criptografia, assinatura e certificação digital",
+     "incidencia": "media"
+    },
+    {
+     "id": "ti13",
+     "nome": "LGPD (Lei 13.709/2018)",
+     "incidencia": "media"
+    }
+   ]
+  },
+  {
+   "id": "aud",
+   "nome": "Auditoria Tributária",
+   "cor": "#8A7364",
+   "questoes": 10,
+   "peso": 2,
+   "incidencia": "media",
+   "assuntos": [
+    {
+     "id": "aud1",
+     "nome": "NBC TSP Estrutura Conceitual (setor público)",
+     "incidencia": "baixa"
+    },
+    {
+     "id": "aud2",
+     "nome": "Normas de auditoria: NBC TA 200 a 810",
+     "incidencia": "alta"
+    },
+    {
+     "id": "aud3",
+     "nome": "Amostragem",
+     "incidencia": "media"
+    },
+    {
+     "id": "aud4",
+     "nome": "Testes de observância e substantivos; subavaliação e superavaliação",
+     "incidencia": "alta"
+    },
+    {
+     "id": "aud5",
+     "nome": "Evidências e procedimentos de auditoria",
+     "incidencia": "alta"
+    },
+    {
+     "id": "aud6",
+     "nome": "Fraudes na escrita contábil e demonstrações sujeitas a auditoria",
+     "incidencia": "media"
+    },
+    {
+     "id": "aud7",
+     "nome": "Ativo circulante: caixa com saldo credor, suprimentos sem origem, recebíveis e baixa fictícia",
+     "incidencia": "alta"
+    },
+    {
+     "id": "aud8",
+     "nome": "Ativo não circulante: estoques, realizável a LP, investimentos, imobilizado e intangível",
+     "incidencia": "media"
+    },
+    {
+     "id": "aud9",
+     "nome": "Passivo: passivos não registrados, fictícios ou já pagos",
+     "incidencia": "media"
+    },
+    {
+     "id": "aud10",
+     "nome": "Patrimônio líquido: aumento de capital sem comprovação, reservas e subvenções",
+     "incidencia": "media"
+    },
+    {
+     "id": "aud11",
+     "nome": "Contas de resultado: omissão de receitas e superavaliação de custos e despesas",
+     "incidencia": "alta"
+    },
+    {
+     "id": "aud12",
+     "nome": "Escrita fiscal: auditoria na EFD e NF-e, inventário, apuração do ICMS e CIAP (Ajuste SINIEF 02/09)",
+     "incidencia": "alta"
+    },
+    {
+     "id": "aud13",
+     "nome": "Divergências fiscais com SGBD: créditos indevidos, alíquota e base, ST e importação",
+     "incidencia": "alta"
+    }
+   ]
+  }
+ ]
 }
+
 </script>
 
 <script>
@@ -437,7 +1432,7 @@ const INC = { alta: 3, media: 2, baixa: 1 };
 const INC_LBL = { alta: 'Alta', media: 'Média', baixa: 'Baixa' };
 const STATUS = { afazer: 'A fazer', iniciado: 'Iniciado', revisar: 'Revisar', finalizado: 'Finalizado' };
 const COMO = ['Questões', 'Aula', 'Leitura'];
-const TIPOS = { conteudo: 'Conteúdo', revisao: 'Revisão espaçada', revisaoGeral: 'Revisão geral', simulado: 'Simulado', revisaoSemanal: 'Revisão semanal', redacao: 'Redação' };
+const TIPOS = { conteudo: 'Conteúdo', revisao: 'Revisão espaçada', revisaoGeral: 'Revisão geral', simulado: 'Simulado', revisaoSemanal: 'Revisão semanal', redacao: 'Discursiva' };
 const COR_TIPO = { simulado: '#8A857A', revisaoSemanal: '#A8A397', redacao: '#B9A15C' };
 const CORES_ANTIGAS = {"#4f46e5": "#6E86A8", "#0e9f9a": "#5F949A", "#d9480f": "#C08A64", "#c2255c": "#A9756F", "#7048e8": "#9A7BA6", "#2b8a3e": "#6B9A84"};
 const CONTA_LIMITE = new Set(['conteudo', 'revisaoGeral']); // tipos que contam na regra de disciplinas/dia
@@ -456,7 +1451,12 @@ function dadosIniciais() { return JSON.parse($('#dados-iniciais').textContent); 
 function carregar() {
   let salvo = null;
   try { salvo = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch (e) { salvo = null; }
-  if (salvo && salvo.config && salvo.materias) { S = salvo; }
+  const base = dadosIniciais();
+  if (salvo && salvo.config && salvo.materias && !(salvo.config.exemplo && !base.config.exemplo)) { S = salvo; }
+  else if (salvo && salvo.config) { // trocou os dados de exemplo pelo plano real
+    S = base; S.cards = []; S.registros = []; gerarCronograma(); S.meta.sincEm = salvo.meta?.sincEm || 0; S.meta.atualizadoEm = Date.now();
+    S.pomo = salvo.pomo; setTimeout(() => toast('Plano atualizado para o seu concurso.', 4000), 400);
+  }
   else { S = dadosIniciais(); S.cards = []; S.registros = []; gerarCronograma(); }
   S.cards ||= []; S.registros ||= []; S.meta ||= {};
   S.materias.forEach(m => { if (CORES_ANTIGAS[m.cor]) m.cor = CORES_ANTIGAS[m.cor]; });
@@ -584,7 +1584,7 @@ function gerarCronograma() {
 
   // Redação (sábado) e domingo (simulado + revisão)
   for (const sw of semanas) {
-    if (c.discursiva && sw.dd.includes(5)) cards.push(novoCard({ tipo: 'redacao', titulo: 'Redação — produção e correção de texto', data: dataDe(sw.w, 5), minutos: +c.redacaoMin || 60, como: 'Leitura' }));
+    if (c.discursiva && sw.dd.includes(5)) cards.push(novoCard({ tipo: 'redacao', titulo: c.discursivaTitulo || 'Redação — produção e correção de texto', data: dataDe(sw.w, 5), minutos: +c.redacaoMin || 60, como: 'Leitura' }));
     const dom = addD(inicioSeg(), sw.w * 7 + 6);
     if (!prova || dom < prova) {
       const h = c.horasDia * 60;
@@ -1375,6 +2375,7 @@ async function enviar() {
 function aplicarRemoto(data) {
   const d = data.dados || {};
   if (!d.config || !Array.isArray(d.materias)) return;
+  if (d.config.exemplo && !dadosIniciais().config.exemplo) { S.meta.atualizadoEm = Date.now(); salvar(false); enviar().catch(() => {}); return; } // nuvem ainda com o exemplo
   S = d; S.cards ||= []; S.registros ||= []; S.meta ||= {};
   S.meta.sincEm = data.atualizado; S.meta.atualizadoEm = data.atualizado;
   salvar(false); render(); renderPomo(); toast('Progresso atualizado da nuvem.');

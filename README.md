@@ -1,5 +1,7 @@
 # Mentor de Estudos para Concursos
 
+Plano atual: **SEFAZ ES — Auditor Fiscal da Receita Estadual**, com base no Edital nº 01/2021 (FGV), até o novo edital sair. Início em 01/12/2026, 26 semanas, 4h/dia (tudo editável no app).
+
 App de planejamento de estudos que roda no navegador, em um único arquivo (`index.html`), sem instalar nada.
 
 ## Como abrir
