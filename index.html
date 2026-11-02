@@ -8,165 +8,258 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
+/* Direção: caderno calmo. Papel quente, tinta escura, um único acento (terracota) usado com parcimônia.
+   Cor de matéria só como pontinho; tudo o mais em tons neutros. Um dia aberto por vez. */
 :root{
-  --bg:#f6f6f3; --surface:#ffffff; --surface-2:#fbfbf9; --line:#e6e4de; --ink:#1d2127; --muted:#6b7079;
-  --accent:#4f46e5; --accent-soft:#eef0ff;
-  --alta:#e5484d; --media:#e79d13; --baixa:#2f9e66;
-  --red:#d93d42; --yellow:#c98a00; --green:#2a9160;
-  --radius:12px; --shadow:0 1px 2px rgba(20,20,30,.05),0 2px 8px rgba(20,20,30,.04);
+  --bg:#F5F2EC; --surface:#FBFAF7; --sunk:#EFEBE3; --ink:#23241F; --muted:#6E6B62; --faint:#9C978C;
+  --line:#E4DED3; --line-2:#ECE7DE;
+  --accent:#B4532A; --accent-ink:#FFF9F3; --accent-soft:#F4E5DB;
+  --ok:#4E7F5E; --ok-soft:#E3EEE5; --warn:#A06F22; --warn-soft:#F5EAD3; --bad:#B4483A; --bad-soft:#F6E1DC;
+  --shadow:0 1px 2px rgba(50,40,20,.04),0 8px 24px -16px rgba(50,40,20,.18);
+  --r:14px;
+  --f-head:'Outfit',system-ui,sans-serif; --f-body:'DM Sans',system-ui,sans-serif;
 }
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#171714; --surface:#1F1F1B; --sunk:#252520; --ink:#ECE8DF; --muted:#A6A195; --faint:#77736A;
+  --line:#34332D; --line-2:#2B2A25; --accent:#E07A4F; --accent-ink:#1B1410; --accent-soft:#3A251B;
+  --ok:#8DBB9A; --ok-soft:#1F3026; --warn:#D9A75A; --warn-soft:#352A17; --bad:#E08070; --bad-soft:#3A221D;
+  --shadow:0 1px 2px rgba(0,0,0,.25),0 12px 28px -18px rgba(0,0,0,.6); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#171714; --surface:#1F1F1B; --sunk:#252520; --ink:#ECE8DF; --muted:#A6A195; --faint:#77736A;
+  --line:#34332D; --line-2:#2B2A25; --accent:#E07A4F; --accent-ink:#1B1410; --accent-soft:#3A251B;
+  --ok:#8DBB9A; --ok-soft:#1F3026; --warn:#D9A75A; --warn-soft:#352A17; --bad:#E08070; --bad-soft:#3A221D;
+  --shadow:0 1px 2px rgba(0,0,0,.25),0 12px 28px -18px rgba(0,0,0,.6); color-scheme:dark}
+
 *{box-sizing:border-box}
 html,body{margin:0}
-body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.45}
-h1,h2,h3,h4,.tag,button,.btn,.tab,header,.kpi b,th{font-family:'Outfit',system-ui,sans-serif}
-input,select,textarea{font-family:'DM Sans',system-ui,sans-serif;font-size:14px;color:var(--ink)}
-h2{font-size:20px;margin:0 0 12px;font-weight:600}
-h3{font-size:16px;margin:0 0 8px;font-weight:600}
-.muted{color:var(--muted)}
-.small{font-size:12px}
+body{font-family:var(--f-body);background:var(--bg);color:var(--ink);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3,button,.btn,.eyebrow,th,.num-big{font-family:var(--f-head)}
+h1,h2,h3{margin:0;font-weight:500;letter-spacing:-.01em;text-wrap:balance}
+p{margin:0}
+input,select,textarea{font-family:var(--f-body);font-size:14px;color:var(--ink)}
+button{cursor:pointer;font-size:14px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:500}
+.muted{color:var(--muted)} .faint{color:var(--faint)} .small{font-size:13px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 max(16px,env(safe-area-inset-left,0px))}
+
+/* Campos e botões */
+input,select,textarea{border:1px solid var(--line);border-radius:10px;padding:8px 11px;background:var(--surface);transition:border-color .15s,box-shadow .15s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 16px;font-weight:500;transition:border-color .15s,background .15s}
+.btn:hover{border-color:var(--faint)}
+.btn.pri{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.btn.pri:hover{opacity:.9}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--muted)}
+.btn.ghost:hover{color:var(--ink);background:var(--sunk)}
+.btn.danger{color:var(--bad)}
+.ico{border:none;background:transparent;color:var(--faint);width:30px;height:30px;border-radius:8px;display:inline-grid;place-items:center;font-size:15px;transition:color .15s,background .15s}
+.ico:hover{color:var(--ink);background:var(--sunk)}
+.ico.danger:hover{color:var(--bad);background:var(--bad-soft)}
 
 /* Topo */
-header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-.topo{max-width:1500px;margin:0 auto;padding:10px 20px;display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center;justify-content:space-between}
-.marca h1{font-size:18px;margin:0;font-weight:700;letter-spacing:-.01em}
-.marca .sub{font-size:12px;color:var(--muted)}
-.contagem{display:flex;align-items:center;gap:12px;position:relative}
-.contagem .num{font-family:'Outfit';font-size:28px;font-weight:700;line-height:1;color:var(--accent)}
-.contagem .lbl{font-size:12px;color:var(--muted);line-height:1.25}
-.ctrl{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.ctrl label{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
-.ctrl input[type=number]{width:64px}
-input,select,textarea{border:1px solid var(--line);border-radius:8px;padding:6px 8px;background:#fff}
-input:focus,select:focus,textarea:focus{outline:2px solid var(--accent-soft);border-color:var(--accent)}
-button,.btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;font-size:13px;font-weight:500;color:var(--ink)}
-button:hover{border-color:#c9c6bd}
-button.pri{background:var(--accent);border-color:var(--accent);color:#fff}
-button.pri:hover{filter:brightness(1.08)}
-button.ghost{border-color:transparent;background:transparent}
-button.danger{color:var(--red)}
-button.icon{padding:3px 7px;font-size:13px;line-height:1}
-
-/* Mini calendário */
-.cal-pop{position:absolute;top:calc(100% + 8px);left:0;background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 8px 30px rgba(0,0,0,.12);padding:12px;width:260px;display:none;z-index:30}
-.cal-pop.open{display:block}
-.cal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-family:'Outfit';font-weight:600}
+header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line-2)}
+.topo{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:18px;flex-wrap:wrap}
+.marca h1{font-size:22px;font-weight:500;line-height:1.2}
+.marca .eyebrow{margin-bottom:2px}
+.topo-dir{display:flex;align-items:center;gap:6px;position:relative}
+.contagem{display:flex;align-items:center;gap:10px;border:none;background:transparent;padding:4px 10px;border-radius:12px;color:var(--ink);text-align:left}
+.contagem:hover{background:var(--sunk)}
+.contagem .n{font-family:var(--f-head);font-size:30px;font-weight:500;line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.contagem .l{font-family:var(--f-body);font-size:12px;color:var(--muted);line-height:1.3}
+.horas{display:flex;align-items:center;gap:4px;font-size:13px;color:var(--muted);padding:0 8px;border-left:1px solid var(--line);margin-left:4px}
+.horas input{width:38px;padding:5px 6px;text-align:center;border-color:transparent;background:transparent;font-family:var(--f-head);font-size:15px;font-weight:500}
+.horas input:hover{border-color:var(--line)}
+.pop{position:absolute;top:calc(100% + 8px);right:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:0 18px 50px -20px rgba(0,0,0,.35);padding:16px;width:290px;display:none;z-index:30}
+.pop.open{display:block}
+.pop .campos{display:flex;flex-direction:column;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line-2)}
+.pop label{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px;justify-content:space-between}
+.cal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-family:var(--f-head);font-weight:500}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;font-size:12px}
-.cal-grid .dow{color:var(--muted);font-family:'Outfit';font-weight:500}
-.cal-grid .d{padding:5px 0;border-radius:6px}
-.cal-grid .d.out{color:#c4c2bb}
-.cal-grid .d.hoje{background:var(--accent-soft);color:var(--accent);font-weight:700}
-.cal-grid .d.prova{background:var(--alta);color:#fff;font-weight:700}
-.cal-grid .d.plano{box-shadow:inset 0 -2px 0 #d9d6ff}
+.cal-grid .dow{color:var(--faint);font-family:var(--f-head);padding-bottom:4px}
+.cal-grid .d{padding:6px 0;border-radius:8px;color:var(--muted)}
+.cal-grid .d.plano{color:var(--ink)}
+.cal-grid .d.out{color:var(--line)}
+.cal-grid .d.hoje{box-shadow:inset 0 0 0 1.5px var(--ink);color:var(--ink);font-weight:600}
+.cal-grid .d.prova{background:var(--accent);color:var(--accent-ink);font-weight:600}
 
-/* Abas */
-nav.abas{max-width:1500px;margin:0 auto;padding:0 20px;display:flex;gap:4px;overflow-x:auto}
-.tab{border:none;background:none;padding:10px 14px;border-bottom:2px solid transparent;border-radius:0;color:var(--muted);font-size:14px;white-space:nowrap}
-.tab.on{color:var(--ink);border-bottom-color:var(--accent);font-weight:600}
-main{max-width:1500px;margin:0 auto;padding:20px}
+nav.abas{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;margin-top:12px}
+.tab{border:none;background:none;padding:10px 12px 12px;color:var(--muted);font-weight:400;border-bottom:2px solid transparent;white-space:nowrap;font-size:14px}
+.tab:hover{color:var(--ink)}
+.tab.on{color:var(--ink);border-bottom-color:var(--ink);font-weight:500}
+main.wrap{padding-top:28px;padding-bottom:80px}
 
-.banner{background:#fff8e6;border:1px solid #f3dfa6;color:#6b5100;border-radius:var(--radius);padding:10px 14px;margin-bottom:16px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
-.banner.info{background:var(--accent-soft);border-color:#d6d9ff;color:#2f2a8a}
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);margin-bottom:16px}
+.aviso{display:flex;align-items:center;gap:12px;justify-content:space-between;font-size:13px;color:var(--muted);background:var(--sunk);border-radius:12px;padding:10px 14px;margin-bottom:24px}
+.aviso b{color:var(--ink);font-weight:500}
+.aviso.acao{background:var(--accent-soft);color:var(--ink)}
+
+/* Cabeçalho de seção */
+.sec-h{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.sec-h h2{font-size:28px;line-height:1.15}
+.sec-h .sub{color:var(--muted);margin-top:4px}
+.seg{display:inline-flex;background:var(--sunk);border-radius:999px;padding:3px}
+.seg button{border:none;background:transparent;color:var(--muted);border-radius:999px;padding:6px 14px;font-size:13px}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+
+/* Semanas (sub-abas) */
+.semanas{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;margin-bottom:28px;padding-bottom:2px}
+.semanas button{flex:none;min-width:38px;height:34px;border:none;background:transparent;border-radius:10px;color:var(--faint);font-size:13px;font-variant-numeric:tabular-nums;position:relative}
+.semanas button:hover{background:var(--sunk);color:var(--ink)}
+.semanas button.on{background:var(--ink);color:var(--bg)}
+.semanas button.atual:not(.on)::after{content:"";position:absolute;bottom:3px;left:50%;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--accent)}
+.semanas button.rev:not(.on){color:var(--accent)}
+
+/* Dias como linhas */
+.dias{display:flex;flex-direction:column;gap:8px}
+.dia{background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r);transition:border-color .15s,background .15s}
+.dia.aberto{border-color:var(--line);box-shadow:var(--shadow)}
+.dia.over{border-color:var(--accent);background:var(--accent-soft)}
+.dia.fora{opacity:.5}
+.dia-h{width:100%;display:grid;grid-template-columns:120px 1fr auto 20px;gap:16px;align-items:center;border:none;background:none;padding:14px 18px;text-align:left;color:var(--ink);font-family:var(--f-body)}
+.dia-h .nome{font-family:var(--f-head);font-weight:500;font-size:15px}
+.dia-h .nome span{font-family:var(--f-body);font-weight:400;color:var(--faint);font-size:13px;margin-left:6px}
+.dia-h .hoje-tag{display:inline-block;margin-left:8px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-family:var(--f-head);font-weight:600}
+.dia-h .mats{color:var(--muted);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.dia-h .tempo{font-size:13px;color:var(--faint);font-variant-numeric:tabular-nums;white-space:nowrap}
+.dia-h .tempo b{color:var(--ink);font-weight:500}
+.dia-h .chev{color:var(--faint);transition:transform .2s;font-size:14px}
+.dia.aberto .chev{transform:rotate(90deg)}
+.dia-warn{margin:-6px 18px 10px;font-size:12.5px;color:var(--bad)}
+.dia-corpo{padding:2px 18px 18px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:8px}
+.add{margin-top:10px;border:1px dashed var(--line);background:transparent;color:var(--faint);border-radius:12px;padding:9px;width:100%;font-size:13px;transition:color .15s,border-color .15s}
+.add:hover{color:var(--ink);border-color:var(--faint)}
+.mdot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--c);margin-right:6px;vertical-align:1px;flex:none}
+.mat-nome{display:inline-flex;align-items:center;margin-right:14px}
+
+/* Card */
+.card{position:relative;display:grid;grid-template-columns:22px 1fr;gap:10px 12px;align-items:start;background:var(--bg);border:1px solid transparent;border-radius:12px;padding:12px 12px 10px;cursor:grab;transition:border-color .15s,background .15s}
+.card:hover{border-color:var(--line);background:var(--surface)}
+.card.drag{opacity:.35}
+.check{appearance:none;width:20px;height:20px;margin:1px 0 0;border-radius:50%;border:1.5px solid var(--faint);background:transparent;display:grid;place-items:center;padding:0;transition:all .15s}
+.check:hover{border-color:var(--ink)}
+.check.on{background:var(--ink);border-color:var(--ink)}
+.check.on::after{content:"";width:5px;height:9px;border:solid var(--bg);border-width:0 2px 2px 0;transform:translateY(-1px) rotate(45deg)}
+.c-tit{font-size:14.5px;line-height:1.4;word-break:break-word}
+.card.fin .c-tit{color:var(--faint);text-decoration:line-through;text-decoration-color:var(--line)}
+.c-meta{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;margin-top:4px;font-size:12.5px;color:var(--muted)}
+.c-meta .sep{color:var(--line)}
+.inc{display:inline-flex;align-items:center;gap:5px}
+.inc::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--ic)}
+.inc-alta{--ic:var(--accent)} .inc-media{--ic:var(--warn)} .inc-baixa{--ic:var(--faint)}
+.tag-inc{display:inline-block;font-size:11.5px;padding:1px 8px;border-radius:999px;background:color-mix(in srgb,var(--ic) 12%,transparent);color:var(--ink)}
+.tag-inc.inc::before{display:none}
+.st{font-size:11.5px;padding:1px 8px;border-radius:999px;font-family:var(--f-head);font-weight:500}
+.st-afazer{background:transparent;color:var(--faint);padding-left:0}
+.st-iniciado{background:color-mix(in srgb,#5C7FB0 16%,transparent);color:var(--ink)}
+.st-revisar{background:var(--warn-soft);color:var(--ink)}
+.st-finalizado{background:var(--ok-soft);color:var(--ink)}
+.st-nao{background:transparent;color:var(--faint);padding-left:0}
+.c-acts{margin-left:auto;display:inline-flex;align-items:center;opacity:0;transition:opacity .15s}
+.c-acts .ico{width:26px;height:26px;font-size:14px}
+.card:hover .c-acts,.card:focus-within .c-acts{opacity:1}
+@media (hover:none){.c-acts{opacity:1}}
+
+.como{appearance:none;-webkit-appearance:none;border:none;background-color:transparent;color:var(--muted);font-size:12.5px;padding:4px 18px 4px 4px;margin-right:4px;cursor:pointer;
+  background-image:linear-gradient(45deg,transparent 50%,var(--faint) 50%),linear-gradient(135deg,var(--faint) 50%,transparent 50%);
+  background-position:calc(100% - 9px) 55%,calc(100% - 5px) 55%;background-size:4px 4px;background-repeat:no-repeat}
+.como:hover{color:var(--ink)}
+.como:focus{box-shadow:none}
+
+/* Kanban */
+.kanban{display:grid;grid-template-columns:repeat(4,minmax(230px,1fr));gap:12px;overflow-x:auto;padding-bottom:6px}
+.lane{background:var(--sunk);border-radius:var(--r);padding:12px;min-height:360px;display:flex;flex-direction:column;gap:6px;border:1px solid transparent;transition:border-color .15s,background .15s}
+.lane.over{border-color:var(--accent);background:var(--accent-soft)}
+.lane-h{display:flex;justify-content:space-between;align-items:center;padding:2px 4px 8px;font-family:var(--f-head);font-weight:500;font-size:14px}
+.lane-h span{color:var(--faint);font-weight:400;font-variant-numeric:tabular-nums}
+.lane .card{background:var(--surface);border-color:var(--line-2)}
+.lane .zona{display:flex;flex-direction:column;gap:6px;flex:1}
+
+/* Blocos genéricos */
+.bloco{background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r);padding:22px 24px;margin-bottom:16px}
+.bloco > h3{font-size:17px;margin-bottom:4px}
+.bloco > .sub{color:var(--muted);font-size:13.5px;margin-bottom:18px}
+details.bloco > summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:var(--f-head);font-weight:500;font-size:15px}
+details.bloco > summary::-webkit-details-marker{display:none}
+details.bloco > summary::after{content:"›";color:var(--faint);transition:transform .2s}
+details.bloco[open] > summary::after{transform:rotate(90deg)}
+details.bloco[open] > summary{margin-bottom:14px}
+.metas{margin-top:24px}
+
+/* Números */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;background:var(--line-2);border:1px solid var(--line-2);border-radius:var(--r);overflow:hidden;margin-bottom:16px}
+.kpi{background:var(--surface);padding:20px 22px}
+.kpi .num-big{display:block;font-size:32px;font-weight:500;letter-spacing:-.02em;line-height:1.1;font-variant-numeric:tabular-nums}
+.kpi span{font-size:13px;color:var(--muted)}
+
+/* Tabelas */
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line-2);vertical-align:middle}
+th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:500}
+tr:last-child td{border-bottom:none}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+td select{border-color:transparent;background:transparent;padding:4px 6px}
+td select:hover{border-color:var(--line)}
+
+/* Barras */
+.barras{display:flex;flex-direction:column;gap:12px}
+.barrow{display:grid;grid-template-columns:minmax(120px,230px) 1fr 120px;gap:16px;align-items:center;font-size:14px}
+.barrow .v{text-align:right;font-variant-numeric:tabular-nums;font-size:13px;color:var(--muted)}
+.bar{height:6px;background:var(--sunk);border-radius:99px;overflow:hidden;position:relative}
+.bar > i{position:absolute;inset:0 auto 0 0;border-radius:99px;background:var(--c,var(--ink))}
+.bar > i.plan{background:color-mix(in srgb,var(--c,var(--ink)) 22%,transparent)}
+.distrib{display:flex;height:10px;border-radius:99px;overflow:hidden;gap:2px;margin:6px 0 18px}
+.distrib i{display:block;height:100%;background:var(--c)}
+
+.pct{font-family:var(--f-head);font-weight:500;padding:2px 9px;border-radius:999px;font-size:13px;font-variant-numeric:tabular-nums}
+.pct.r{color:var(--bad);background:var(--bad-soft)}
+.pct.y{color:var(--warn);background:var(--warn-soft)}
+.pct.g{color:var(--ok);background:var(--ok-soft)}
+
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;align-items:end}
+.form-grid label,.campo{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12.5px;background:var(--sunk);color:var(--muted);border-radius:999px;padding:3px 10px}
+.chip.ok{background:var(--ok-soft);color:var(--ink)}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .spacer{flex:1}
 
-/* Semanas */
-.semanas{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:12px}
-.semanas button{white-space:nowrap;padding:6px 10px;font-size:12px}
-.semanas button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
-.semanas button.atual:not(.on){border-color:var(--accent);color:var(--accent)}
-.semanas button.rev:not(.on){background:#fff3f3}
-.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
-.seg button{border:none;border-radius:0;padding:6px 12px}
-.seg button.on{background:var(--ink);color:#fff}
+.mat-h{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+.mat-h h3{font-size:17px;display:flex;align-items:center}
+.mat-h label{font-size:12.5px;color:var(--faint);display:flex;align-items:center;gap:6px}
+.mat-h input[type=number]{width:60px;padding:5px 8px}
+.mat-h input[type=color]{width:22px;height:22px;padding:0;border:none;border-radius:50%;background:none;cursor:pointer}
+.mat-h input[type=color]::-webkit-color-swatch-wrapper{padding:0}
+.mat-h input[type=color]::-webkit-color-swatch{border:none;border-radius:50%}
 
-.grid-dias{display:grid;grid-template-columns:repeat(7,minmax(180px,1fr));gap:10px;overflow-x:auto;padding-bottom:8px}
-.col{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--radius);padding:8px;min-height:340px;display:flex;flex-direction:column;transition:background .15s}
-.col.hoje{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
-.col.over{background:var(--accent-soft)}
-.col.fora{opacity:.55}
-.col-h{padding:2px 4px 8px;border-bottom:1px solid var(--line);margin-bottom:8px}
-.col-h .t{font-family:'Outfit';font-weight:600;display:flex;justify-content:space-between;align-items:center}
-.col-h .m{font-size:11px;color:var(--muted)}
-.alerta{font-size:11px;color:var(--red);margin-top:4px}
-.zona{flex:1;min-height:60px}
-.add-dia{margin-top:6px;width:100%;border-style:dashed;color:var(--muted);background:transparent}
-
-.grid-kanban{display:grid;grid-template-columns:repeat(4,minmax(220px,1fr));gap:12px;overflow-x:auto}
-.grid-kanban .col{min-height:420px}
-
-.card{background:#fff;border:1px solid var(--line);border-left:4px solid var(--c,#999);border-radius:10px;padding:8px 9px;margin-bottom:8px;cursor:grab;box-shadow:var(--shadow)}
-.card.drag{opacity:.4}
-.card.fin{opacity:.72}
-.card.fin .tit{text-decoration:line-through;text-decoration-color:#bbb}
-.card .tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:5px}
-.card .tit{font-weight:500;font-size:13px;margin-bottom:5px;word-break:break-word}
-.card .meta{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-bottom:6px}
-.card .acoes{display:flex;gap:4px;align-items:center}
-.card .acoes select{font-size:12px;padding:3px 5px;flex:1;min-width:0}
-.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:600;line-height:1.5;
-  background:color-mix(in srgb,var(--c,#888) 14%,#fff);color:color-mix(in srgb,var(--c,#888) 78%,#000);white-space:nowrap}
-.inc-alta{--c:var(--alta)} .inc-media{--c:var(--media)} .inc-baixa{--c:var(--baixa)}
-.st{font-size:11px;padding:1px 7px;border-radius:6px;font-family:'Outfit';font-weight:500}
-.st-afazer{background:#f0efea;color:#5b5f66}
-.st-iniciado{background:#e6f0ff;color:#2459c4}
-.st-revisar{background:#fff1dc;color:#9a5c00}
-.st-finalizado{background:#e2f5ea;color:#1f7a4b}
-.st-nao{background:#f6f6f6;color:#999}
-
-/* Tabelas */
-table{width:100%;border-collapse:collapse}
-th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
-th{font-size:12px;color:var(--muted);font-weight:500}
-td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
-.tbl-wrap{overflow-x:auto}
-
-/* Barras */
-.bar{height:10px;background:#efede8;border-radius:99px;overflow:hidden;position:relative}
-.bar>i{display:block;height:100%;background:var(--c,var(--accent));border-radius:99px}
-.bar.dupla>i.plan{position:absolute;inset:0 auto 0 0;background:color-mix(in srgb,var(--c,var(--accent)) 25%,#fff)}
-.bar.dupla>i.real{position:absolute;inset:0 auto 0 0}
-.barrow{display:grid;grid-template-columns:minmax(120px,220px) 1fr 110px;gap:12px;align-items:center;margin:8px 0}
-.barrow .v{text-align:right;font-variant-numeric:tabular-nums;font-size:12px;color:var(--muted)}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:16px}
-.kpi{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:14px}
-.kpi b{display:block;font-size:26px;font-weight:700}
-.kpi span{font-size:12px;color:var(--muted)}
-.dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--c);margin-right:6px;vertical-align:middle}
-
-.pct{font-weight:700;font-family:'Outfit';padding:2px 8px;border-radius:6px}
-.pct.r{color:var(--red);background:#fdecec}
-.pct.y{color:var(--yellow);background:#fff6dc}
-.pct.g{color:var(--green);background:#e4f5ec}
-
-.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;align-items:end}
-.form-grid label,.campo{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted)}
-.chips{display:flex;flex-wrap:wrap;gap:4px}
-.chip{font-size:11px;background:#f2f1ec;border-radius:6px;padding:2px 7px}
-.chip.ok{background:#e2f5ea;color:#1f7a4b}
-
-dialog{border:none;border-radius:16px;padding:0;max-width:560px;width:calc(100% - 32px);box-shadow:0 20px 60px rgba(0,0,0,.25)}
-dialog::backdrop{background:rgba(20,20,30,.35)}
-.modal-c{padding:20px}
+dialog{border:none;border-radius:20px;padding:0;max-width:540px;width:calc(100% - 32px);background:var(--surface);color:var(--ink);box-shadow:0 30px 80px -20px rgba(0,0,0,.4)}
+dialog::backdrop{background:rgba(30,25,15,.32);backdrop-filter:blur(2px)}
+.modal-c{padding:26px}
+.modal-c h2{font-size:22px;margin-bottom:18px}
 .modal-c .form-grid{grid-template-columns:1fr 1fr}
 .modal-c .full{grid-column:1/-1}
-.modal-f{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.modal-f{display:flex;justify-content:flex-end;gap:8px;margin-top:22px;flex-wrap:wrap}
+.modal-sec{margin-top:22px;padding-top:18px;border-top:1px solid var(--line-2)}
 
-#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:100;max-width:90vw}
-#toast.on{opacity:1}
-details summary{cursor:pointer;font-family:'Outfit';font-weight:500}
-.mat-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
-.mat-h h3{margin:0}
-.mat-h input[type=color]{width:30px;height:26px;padding:0;border:none;background:none}
-@media (max-width:700px){ .topo{padding:10px 16px} main{padding:16px} .barrow{grid-template-columns:1fr;gap:4px} .barrow .v{text-align:left} }
+#toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,8px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:100;max-width:90vw}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+@media (max-width:720px){
+  .dia-h{grid-template-columns:1fr auto 16px;gap:10px}
+  .dia-h .mats{grid-column:1/-1;grid-row:2;white-space:normal}
+  .barrow{grid-template-columns:1fr auto;gap:6px 12px}.barrow .bar{grid-column:1/-1;grid-row:2}
+  .sec-h h2{font-size:24px}
+  .bloco{padding:18px}
+  .horas{border-left:none;padding:0}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
 <header>
-  <div class="topo" id="topo"></div>
-  <nav class="abas" id="abas"></nav>
+  <div class="wrap"><div class="topo" id="topo"></div><nav class="abas" id="abas"></nav></div>
 </header>
-<main id="main"></main>
+<main class="wrap" id="main"></main>
 <dialog id="modal"><div class="modal-c" id="modalBody"></div></dialog>
 <div id="toast"></div>
 <input type="file" id="fileImport" accept="application/json,.json" hidden>
@@ -209,7 +302,7 @@ details summary{cursor:pointer;font-family:'Outfit';font-weight:500}
     "Incidências deste exemplo são ESTIMADAS e servem apenas para demonstrar o app."
   ],
   "materias": [
-    {"id":"port","nome":"Língua Portuguesa","cor":"#4f46e5","questoes":15,"peso":1,"incidencia":"alta","assuntos":[
+    {"id":"port","nome":"Língua Portuguesa","cor":"#6E86A8","questoes":15,"peso":1,"incidencia":"alta","assuntos":[
       {"id":"port1","nome":"Compreensão e interpretação de textos","incidencia":"alta"},
       {"id":"port2","nome":"Tipologia e gêneros textuais","incidencia":"media"},
       {"id":"port3","nome":"Ortografia oficial","incidencia":"baixa"},
@@ -223,7 +316,7 @@ details summary{cursor:pointer;font-family:'Outfit';font-weight:500}
       {"id":"port11","nome":"Sintaxe da oração e do período","incidencia":"media"},
       {"id":"port12","nome":"Reescrita de frases e parágrafos","incidencia":"alta"}
     ]},
-    {"id":"rlm","nome":"Raciocínio Lógico-Matemático","cor":"#0e9f9a","questoes":10,"peso":1,"incidencia":"media","assuntos":[
+    {"id":"rlm","nome":"Raciocínio Lógico-Matemático","cor":"#5F949A","questoes":10,"peso":1,"incidencia":"media","assuntos":[
       {"id":"rlm1","nome":"Proposições e conectivos","incidencia":"alta"},
       {"id":"rlm2","nome":"Equivalências e negações","incidencia":"alta"},
       {"id":"rlm3","nome":"Argumentação lógica","incidencia":"media"},
@@ -233,7 +326,7 @@ details summary{cursor:pointer;font-family:'Outfit';font-weight:500}
       {"id":"rlm7","nome":"Porcentagem, razão e proporção","incidencia":"alta"},
       {"id":"rlm8","nome":"Sequências lógicas","incidencia":"baixa"}
     ]},
-    {"id":"info","nome":"Noções de Informática","cor":"#d9480f","questoes":10,"peso":1,"incidencia":"media","assuntos":[
+    {"id":"info","nome":"Noções de Informática","cor":"#C08A64","questoes":10,"peso":1,"incidencia":"media","assuntos":[
       {"id":"info1","nome":"Windows 10/11","incidencia":"media"},
       {"id":"info2","nome":"Pacote Microsoft Office","incidencia":"alta"},
       {"id":"info3","nome":"Internet e navegadores","incidencia":"media"},
@@ -242,7 +335,7 @@ details summary{cursor:pointer;font-family:'Outfit';font-weight:500}
       {"id":"info6","nome":"Computação em nuvem","incidencia":"baixa"},
       {"id":"info7","nome":"Redes de computadores","incidencia":"baixa"}
     ]},
-    {"id":"const","nome":"Direito Constitucional","cor":"#c2255c","questoes":15,"peso":2,"incidencia":"alta","assuntos":[
+    {"id":"const","nome":"Direito Constitucional","cor":"#A9756F","questoes":15,"peso":2,"incidencia":"alta","assuntos":[
       {"id":"const1","nome":"Princípios fundamentais","incidencia":"media"},
       {"id":"const2","nome":"Direitos e garantias fundamentais","incidencia":"alta"},
       {"id":"const3","nome":"Organização do Estado","incidencia":"media"},
@@ -251,7 +344,7 @@ details summary{cursor:pointer;font-family:'Outfit';font-weight:500}
       {"id":"const6","nome":"Poder Judiciário","incidencia":"alta"},
       {"id":"const7","nome":"Funções essenciais à Justiça","incidencia":"baixa"}
     ]},
-    {"id":"adm","nome":"Direito Administrativo","cor":"#7048e8","questoes":15,"peso":2,"incidencia":"alta","assuntos":[
+    {"id":"adm","nome":"Direito Administrativo","cor":"#9A7BA6","questoes":15,"peso":2,"incidencia":"alta","assuntos":[
       {"id":"adm1","nome":"Princípios da Administração Pública","incidencia":"alta"},
       {"id":"adm2","nome":"Organização administrativa","incidencia":"media"},
       {"id":"adm3","nome":"Atos administrativos","incidencia":"alta"},
@@ -262,7 +355,7 @@ details summary{cursor:pointer;font-family:'Outfit';font-weight:500}
       {"id":"adm8","nome":"Controle da Administração","incidencia":"baixa"},
       {"id":"adm9","nome":"Improbidade administrativa","incidencia":"media"}
     ]},
-    {"id":"gest","nome":"Administração Pública e Gestão","cor":"#2b8a3e","questoes":15,"peso":2,"incidencia":"media","assuntos":[
+    {"id":"gest","nome":"Administração Pública e Gestão","cor":"#6B9A84","questoes":15,"peso":2,"incidencia":"media","assuntos":[
       {"id":"gest1","nome":"Planejamento estratégico","incidencia":"media"},
       {"id":"gest2","nome":"Gestão de pessoas","incidencia":"media"},
       {"id":"gest3","nome":"Gestão de processos","incidencia":"media"},
@@ -301,7 +394,8 @@ const INC_LBL = { alta: 'Alta', media: 'Média', baixa: 'Baixa' };
 const STATUS = { afazer: 'A fazer', iniciado: 'Iniciado', revisar: 'Revisar', finalizado: 'Finalizado' };
 const COMO = ['Questões', 'Aula', 'Leitura'];
 const TIPOS = { conteudo: 'Conteúdo', revisao: 'Revisão espaçada', revisaoGeral: 'Revisão geral', simulado: 'Simulado', revisaoSemanal: 'Revisão semanal', redacao: 'Redação' };
-const COR_TIPO = { simulado: '#475569', revisaoSemanal: '#64748b', redacao: '#b45309' };
+const COR_TIPO = { simulado: '#8A857A', revisaoSemanal: '#A8A397', redacao: '#B9A15C' };
+const CORES_ANTIGAS = {"#4f46e5": "#6E86A8", "#0e9f9a": "#5F949A", "#d9480f": "#C08A64", "#c2255c": "#A9756F", "#7048e8": "#9A7BA6", "#2b8a3e": "#6B9A84"};
 const CONTA_LIMITE = new Set(['conteudo', 'revisaoGeral']); // tipos que contam na regra de disciplinas/dia
 
 function toast(msg, ms = 2600) {
@@ -311,7 +405,7 @@ function toast(msg, ms = 2600) {
 
 /* ================= Estado ================= */
 let S; // estado completo
-const UI = { aba: 'plan', semana: null, vista: 'dias', calMes: null, calOpen: false, editReg: null };
+const UI = { aba: 'plan', semana: null, vista: 'dias', calMes: null, calOpen: false, editReg: null, aberto: null, metasOpen: false };
 
 function dadosIniciais() { return JSON.parse($('#dados-iniciais').textContent); }
 
@@ -321,6 +415,7 @@ function carregar() {
   if (salvo && salvo.config && salvo.materias) { S = salvo; }
   else { S = dadosIniciais(); S.cards = []; S.registros = []; gerarCronograma(); }
   S.cards ||= []; S.registros ||= []; S.meta ||= {};
+  S.materias.forEach(m => { if (CORES_ANTIGAS[m.cor]) m.cor = CORES_ANTIGAS[m.cor]; });
   try { const ui = JSON.parse(localStorage.getItem(STORAGE_KEY + '-ui') || '{}'); if (ui.aba) UI.aba = ui.aba; if (ui.vista) UI.vista = ui.vista; } catch (e) {}
 }
 function salvar() {
@@ -538,55 +633,60 @@ const regsSemana = w => S.registros.filter(r => semanaDe(r.data) === w);
 function acertos(q, e) { q = +q || 0; e = +e || 0; return q ? Math.round(1000 * (q - e) / q) / 10 : null; }
 function pctHtml(p) { if (p === null) return '<span class="muted">—</span>'; const cl = p < 70 ? 'r' : p <= 80 ? 'y' : 'g'; return `<span class="pct ${cl}">${String(p).replace('.', ',')}%</span>`; }
 
+/* ================= Render: formatos curtos ================= */
+const hm = min => { min = Math.max(0, Math.round(min || 0)); const h = Math.floor(min / 60), m = min % 60; return h ? `${h}h${m ? String(m).padStart(2, '0') : ''}` : `${m}min`; };
+const MESES_C = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+const dataLonga = s => { const d = pd(s); return `${d.getDate()} ${MESES_C[d.getMonth()]}`; };
+const corDe = k => { const m = mat(k.materiaId); return m ? m.cor : (COR_TIPO[k.tipo] || '#9C978C'); };
+
 /* ================= Render: topo ================= */
 function renderTopo() {
   const c = S.config, W = numSemanas();
-  let num, lbl;
+  let n, l;
   if (c.prova) {
     const d = diffDias(pd(hoje()), pd(c.prova));
-    num = d >= 0 ? d : 0;
-    lbl = d > 0 ? `dias até a prova<br><b>${fmtBR(c.prova)}</b> · ${W} semanas` : d === 0 ? 'É hoje! Boa prova.' : 'prova realizada';
-  } else { num = W; lbl = `semanas planejadas<br><b>Prova: a definir</b>`; }
+    n = Math.max(0, d);
+    l = d > 0 ? `dias até a prova<br>${dataLonga(c.prova)}` : d === 0 ? 'é hoje.<br>Boa prova!' : 'prova<br>realizada';
+  } else { n = W; l = 'semanas de plano<br>prova a definir'; }
   $('#topo').innerHTML = `
-    <div class="marca"><h1>Mentor de Estudos</h1><div class="sub">${esc(c.concurso)} · Banca: ${esc(c.banca)}</div></div>
-    <div class="contagem">
-      <div class="num">${num}</div><div class="lbl">${lbl}</div>
-      <button class="icon ghost" id="btnCal" title="Calendário">📅</button>
-      <div class="cal-pop ${UI.calOpen ? 'open' : ''}" id="calPop">${renderCal()}</div>
-    </div>
-    <div class="ctrl">
-      <label>Data da prova <input type="date" id="inProva" value="${c.prova || ''}"></label>
-      <label><input type="checkbox" id="inDefinir" ${c.prova ? '' : 'checked'}> a definir</label>
-      <label>Horas/dia <input type="number" id="inHoras" min="0.5" max="16" step="0.5" value="${c.horasDia}"></label>
-      <button id="btnConfig">⚙ Configurações</button>
-      <button id="btnExport" title="Baixar backup em JSON">⬇ Exportar</button>
-      <button id="btnImport" title="Carregar backup JSON">⬆ Importar</button>
+    <div class="marca"><p class="eyebrow">Mentor de estudos · ${esc(c.banca === 'a definir' ? 'banca a definir' : c.banca)}</p><h1>${esc(c.concurso)}</h1></div>
+    <div class="topo-dir">
+      <button class="contagem" id="btnCal" title="Calendário e data da prova"><span class="n">${n}</span><span class="l">${l}</span></button>
+      <label class="horas" title="Horas de estudo por dia"><input type="number" id="inHoras" min="0.5" max="16" step="0.5" value="${c.horasDia}" aria-label="Horas por dia">h/dia</label>
+      <button class="ico" id="btnConfig" title="Configurações e backup" aria-label="Configurações">⚙</button>
+      <div class="pop ${UI.calOpen ? 'open' : ''}" id="calPop">${renderCal()}
+        <div class="campos">
+          <label>Data da prova <input type="date" id="inProva" value="${c.prova || ''}"></label>
+          <label style="justify-content:flex-start"><input type="checkbox" id="inDefinir" ${c.prova ? '' : 'checked'}> Ainda a definir</label>
+        </div>
+      </div>
     </div>`;
 }
 function renderCal() {
   const base = UI.calMes || (S.config.prova ? pd(S.config.prova) : new Date());
   const y = base.getFullYear(), mo = base.getMonth();
-  const primeiro = new Date(y, mo, 1), ini = monday(primeiro);
+  const ini = monday(new Date(y, mo, 1));
   const t = hoje(), p = S.config.prova, a = iso(inicioSeg()), z = ultimoDiaPlano();
-  let h = `<div class="cal-head"><button class="icon ghost" data-cal="-1">‹</button>${MESES[mo]} ${y}<button class="icon ghost" data-cal="1">›</button></div><div class="cal-grid">`;
+  let h = `<div class="cal-head"><button class="ico" data-cal="-1" aria-label="Mês anterior">‹</button>${MESES[mo]} ${y}<button class="ico" data-cal="1" aria-label="Próximo mês">›</button></div><div class="cal-grid">`;
   h += DIAS.map(d => `<div class="dow">${d[0]}</div>`).join('');
   for (let i = 0; i < 42; i++) {
     const d = addD(ini, i), s = iso(d);
-    const cl = ['d', d.getMonth() !== mo ? 'out' : '', s === t ? 'hoje' : '', s === p ? 'prova' : '', s >= a && s <= z ? 'plano' : ''].join(' ');
+    const cl = ['d', d.getMonth() !== mo ? 'out' : '', s >= a && s <= z ? 'plano' : '', s === t ? 'hoje' : '', s === p ? 'prova' : ''].join(' ');
     h += `<div class="${cl}" title="${fmtBR(s)}">${d.getDate()}</div>`;
   }
-  return h + `</div><div class="small muted" style="margin-top:8px">Sublinhado: período do plano · Vermelho: prova</div>`;
+  return h + `</div>`;
 }
 
 /* ================= Render: abas ================= */
 const ABAS = [['plan', 'Planejamento semanal'], ['ciclo', 'Ciclos de estudo'], ['mat', 'Matérias'], ['stats', 'Estatísticas'], ['tempo', 'Tempo de estudos']];
 function renderAbas() { $('#abas').innerHTML = ABAS.map(([k, n]) => `<button class="tab ${UI.aba === k ? 'on' : ''}" data-aba="${k}">${n}</button>`).join(''); }
 
-function banners() {
+function avisos() {
   let h = '';
-  if (S.config.exemplo) h += `<div class="banner"><span>📌 <b>Dados de exemplo.</b> ${esc(S.config.edital || '')} Edite o JSON no arquivo ou importe um backup com o seu plano.</span></div>`;
   if (S.meta.semanasGeradas && S.meta.semanasGeradas !== numSemanas())
-    h += `<div class="banner info"><span>O período mudou de ${S.meta.semanasGeradas} para ${numSemanas()} semanas.</span><button class="pri" data-acao="regerar">Regerar cronograma</button></div>`;
+    h += `<div class="aviso acao"><span>O período mudou de ${S.meta.semanasGeradas} para ${numSemanas()} semanas.</span><button class="btn pri" data-acao="regerar">Regerar cronograma</button></div>`;
+  else if (S.config.exemplo && !S.meta.avisoOculto)
+    h += `<div class="aviso"><span><b>Dados de exemplo.</b> Quando o edital chegar, o plano real entra no lugar deste.</span><button class="ico" data-acao="ocultarAviso" aria-label="Fechar aviso">×</button></div>`;
   return h;
 }
 
@@ -595,97 +695,102 @@ function render() {
   UI.semana = Math.min(UI.semana, numSemanas() - 1);
   renderTopo(); renderAbas();
   const f = { plan: renderPlan, ciclo: renderCiclo, mat: renderMaterias, stats: renderStats, tempo: renderTempo }[UI.aba];
-  $('#main').innerHTML = banners() + f();
+  $('#main').innerHTML = avisos() + f();
   if (UI.aba === 'tempo') montarTempo();
 }
 
 /* ---------- Card ---------- */
 function cardHtml(k, mostrarDia) {
   const m = mat(k.materiaId), ass = k.assuntoId ? assunto(k.assuntoId) : null;
-  const cor = m ? m.cor : (COR_TIPO[k.tipo] || '#64748b');
   const inc = ass ? ass.a.incidencia : (m ? m.incidencia : null);
-  return `<div class="card ${k.status === 'finalizado' ? 'fin' : ''}" draggable="true" data-id="${k.id}" style="--c:${cor}">
-    <div class="tags">
-      <span class="tag" style="--c:${cor}">${esc(m ? m.nome : TIPOS[k.tipo])}</span>
-      ${inc ? `<span class="tag inc-${inc}">${INC_LBL[inc]}</span>` : ''}
-      ${k.tipo === 'revisao' || k.tipo === 'revisaoGeral' ? `<span class="tag" style="--c:#0891b2">${TIPOS[k.tipo]}</span>` : ''}
-    </div>
-    <div class="tit">${esc(k.titulo)}</div>
-    <div class="meta"><span>⏱ ${fmtH(k.minutos)}</span><span class="st st-${k.status}">${STATUS[k.status]}</span>${mostrarDia ? `<span>${DIAS[diaDe(k.data)]} ${fmtCurto(k.data)}</span>` : ''}</div>
-    <div class="acoes">
-      <select data-como="${k.id}" title="Como concluir">${COMO.map(o => `<option ${k.como === o ? 'selected' : ''}>${o}</option>`).join('')}</select>
-      <button class="icon" data-edit="${k.id}" title="Editar">✎</button>
-      <button class="icon danger" data-del="${k.id}" title="Excluir">🗑</button>
-    </div>
+  const fin = k.status === 'finalizado';
+  const partes = [`<span class="mat-nome" style="margin:0"><span class="mdot" style="--c:${corDe(k)}"></span>${esc(m ? m.nome : TIPOS[k.tipo])}</span>`];
+  if (inc) partes.push(`<span class="tag-inc inc inc-${inc}">${INC_LBL[inc]}</span>`);
+  partes.push(`<span>${hm(k.minutos)}</span>`);
+  if (mostrarDia) partes.push(`<span>${DIAS[diaDe(k.data)].toLowerCase()} ${fmtCurto(k.data)}</span>`);
+  if (!mostrarDia && (k.status === 'iniciado' || k.status === 'revisar')) partes.push(`<span class="st st-${k.status}">${STATUS[k.status]}</span>`);
+  return `<div class="card ${fin ? 'fin' : ''}" draggable="true" data-id="${k.id}">
+    <button class="check ${fin ? 'on' : ''}" data-check="${k.id}" aria-label="${fin ? 'Desmarcar' : 'Marcar como finalizado'}" title="${fin ? 'Desmarcar' : 'Finalizar'}"></button>
+    <div><div class="c-tit">${esc(k.titulo)}</div><div class="c-meta">${partes.join('')}<span class="c-acts">
+      <select class="como" data-como="${k.id}" title="Como concluir" aria-label="Como concluir">${COMO.map(o => `<option ${k.como === o ? 'selected' : ''}>${o}</option>`).join('')}</select>
+      <button class="ico" data-edit="${k.id}" title="Editar" aria-label="Editar">✎</button>
+      <button class="ico danger" data-del="${k.id}" title="Excluir" aria-label="Excluir">×</button>
+    </span></div></div>
   </div>`;
 }
 const ORDEM_TIPO = { revisao: 0, conteudo: 1, revisaoGeral: 1, redacao: 2, simulado: 3, revisaoSemanal: 4 };
 const ordenar = l => l.sort((a, b) => (ORDEM_TIPO[a.tipo] - ORDEM_TIPO[b.tipo]) || (S.materias.indexOf(mat(a.materiaId)) - S.materias.indexOf(mat(b.materiaId))));
 
 /* ---------- Planejamento ---------- */
+function diaAberto(dt, w) {
+  if (UI.aberto && semanaDe(UI.aberto) === w) return UI.aberto === dt;
+  if (UI.aberto === '') return false;
+  const t = hoje(); return semanaDe(t) === w ? dt === t : dt === dataDe(w, 0);
+}
 function renderPlan() {
   const W = numSemanas(), w = UI.semana, atual = semanaDe(hoje());
-  let h = `<div class="semanas">`;
-  for (let i = 0; i < W; i++) {
-    const ini = dataDe(i, 0), fim = dataDe(i, 6);
-    h += `<button data-sem="${i}" class="${i === w ? 'on' : ''} ${i === atual ? 'atual' : ''} ${semanaRevisao(i) ? 'rev' : ''}">S${i + 1} · ${fmtCurto(ini)}–${fmtCurto(fim)}${semanaRevisao(i) ? ' · Revisão' : ''}</button>`;
-  }
+  const lista = cardsSemana(w), top = topicos(lista);
+  let h = `<div class="semanas" role="tablist" aria-label="Semanas">`;
+  for (let i = 0; i < W; i++) h += `<button data-sem="${i}" class="${i === w ? 'on' : ''} ${i === atual ? 'atual' : ''} ${semanaRevisao(i) ? 'rev' : ''}" title="Semana ${i + 1}: ${fmtCurto(dataDe(i, 0))} a ${fmtCurto(dataDe(i, 6))}${semanaRevisao(i) ? ' · revisão' : ''}">${i + 1}</button>`;
   h += `</div>`;
-  const lista = cardsSemana(w);
-  h += `<div class="row" style="margin-bottom:12px">
-      <h2 style="margin:0">Semana ${w + 1}${semanaRevisao(w) ? ' — 100% revisão' : ''}</h2>
-      <span class="muted">${pctFin(topicos(lista))}% dos tópicos finalizados</span>
-      <span class="spacer"></span>
-      <div class="seg"><button data-vista="dias" class="${UI.vista === 'dias' ? 'on' : ''}">Dias da semana</button><button data-vista="kanban" class="${UI.vista === 'kanban' ? 'on' : ''}">Kanban</button></div>
-      <button class="pri" data-add="${dataDe(w, Math.max(0, Math.min(6, w === atual ? diaDe(hoje()) : 0)))}">+ Adicionar tópico</button>
-    </div>`;
-  h += metasSemana(w, lista);
+  h += `<div class="sec-h"><div>
+      <p class="eyebrow">${dataLonga(dataDe(w, 0))} – ${dataLonga(dataDe(w, 6))}${semanaRevisao(w) ? ' · semana de revisão' : ''}</p>
+      <h2>Semana ${w + 1}</h2>
+      <p class="sub">${top.filter(k => k.status === 'finalizado').length} de ${top.length} tópicos feitos</p>
+    </div><div class="row">
+      <div class="seg"><button data-vista="dias" class="${UI.vista === 'dias' ? 'on' : ''}">Dias</button><button data-vista="kanban" class="${UI.vista === 'kanban' ? 'on' : ''}">Kanban</button></div>
+      <button class="btn" data-add="${w === atual ? hoje() : dataDe(w, 0)}">+ Tópico</button>
+    </div></div>`;
   if (UI.vista === 'dias') {
-    h += `<div class="grid-dias">`;
-    const lim = ultimoDiaPlano(), ini = S.config.inicio;
+    h += `<div class="dias">`;
+    const lim = ultimoDiaPlano(), ini = S.config.inicio, meta = S.config.horasDia * 60;
     for (let d = 0; d < 7; d++) {
       const dt = dataDe(w, d), doDia = ordenar(lista.filter(k => k.data === dt));
       const plan = doDia.reduce((s, k) => s + k.minutos, 0), viol = violacoes(materiasDoDia(dt));
-      const tipoDia = d === 6 ? 'Simulado e revisão' : (semanaRevisao(w) ? 'Revisão' : (d === 5 && S.config.discursiva ? 'Conteúdo + redação' : 'Conteúdo novo'));
-      const prova = dt === S.config.prova;
-      h += `<div class="col ${dt === hoje() ? 'hoje' : ''} ${dt < ini || dt > lim ? 'fora' : ''}" data-drop-dia="${dt}">
-        <div class="col-h"><div class="t"><span>${DIAS_LONGOS[d]}</span><span class="muted small">${fmtCurto(dt)}</span></div>
-        <div class="m">${prova ? '🎯 <b>Dia da prova</b>' : tipoDia}</div>
-        <div class="m">Meta: ${fmtH(S.config.horasDia * 60)} · Planejado: ${fmtH(plan)}</div>
-        ${viol.map(v => `<div class="alerta">⚠ ${esc(v)}</div>`).join('')}</div>
-        <div class="zona">${doDia.map(k => cardHtml(k)).join('')}</div>
-        <button class="add-dia" data-add="${dt}">+ tópico</button>
-      </div>`;
+      const mats = [...new Set(doDia.filter(k => k.materiaId).map(k => k.materiaId))].map(mat).filter(Boolean);
+      const extras = [...new Set(doDia.filter(k => !k.materiaId).map(k => TIPOS[k.tipo]))];
+      const resumo = dt === S.config.prova ? 'Dia da prova' :
+        mats.map(m => `<span class="mat-nome"><span class="mdot" style="--c:${m.cor}"></span>${esc(m.nome)}</span>`).join('') + (extras.length ? `<span class="faint">${extras.join(' · ')}</span>` : '') || '<span class="faint">livre</span>';
+      const aberto = diaAberto(dt, w), feitos = doDia.filter(k => k.status === 'finalizado').length;
+      h += `<section class="dia ${aberto ? 'aberto' : ''} ${dt < ini || dt > lim ? 'fora' : ''}" data-drop-dia="${dt}">
+        <button class="dia-h" data-dia="${dt}" aria-expanded="${aberto}">
+          <span class="nome">${DIAS_LONGOS[d]}<span>${fmtCurto(dt)}</span>${dt === hoje() ? '<span class="hoje-tag">hoje</span>' : ''}</span>
+          <span class="mats">${resumo}</span>
+          <span class="tempo">${doDia.length ? `${feitos}/${doDia.length} · ` : ''}<b>${hm(plan)}</b> de ${hm(meta)}</span>
+          <span class="chev">›</span>
+        </button>
+        ${viol.length ? `<p class="dia-warn">${viol.map(esc).join(' · ')}</p>` : ''}
+        ${aberto ? `<div class="dia-corpo"><div class="cards">${doDia.map(k => cardHtml(k)).join('')}</div><button class="add" data-add="${dt}">+ adicionar tópico neste dia</button></div>` : ''}
+      </section>`;
     }
     h += `</div>`;
   } else {
-    h += `<div class="grid-kanban">`;
+    h += `<div class="kanban">`;
     for (const st of Object.keys(STATUS)) {
       const l = lista.filter(k => k.status === st).sort((a, b) => a.data.localeCompare(b.data));
-      h += `<div class="col" data-drop-st="${st}"><div class="col-h"><div class="t"><span>${STATUS[st]}</span><span class="st st-${st}">${l.length}</span></div></div>
-        <div class="zona">${l.map(k => cardHtml(k, true)).join('')}</div></div>`;
+      h += `<div class="lane" data-drop-st="${st}"><div class="lane-h">${STATUS[st]}<span>${l.length}</span></div><div class="zona">${l.map(k => cardHtml(k, true)).join('')}</div></div>`;
     }
     h += `</div>`;
   }
-  return h;
+  return h + metasSemana(w, lista);
 }
 function metasSemana(w, lista) {
   const regs = regsSemana(w);
   const linhas = S.materias.map(m => {
     const l = lista.filter(k => k.materiaId === m.id && k.tipo !== 'revisao');
     const plan = l.reduce((s, k) => s + k.minutos, 0); if (!plan) return '';
-    const dias = [...new Set(l.map(k => diaDe(k.data)))].sort().map(d => DIAS[d]).join(', ');
+    const diasN = new Set(l.map(k => diaDe(k.data))).size;
     const feito = regs.filter(r => r.materiaId === m.id).reduce((s, r) => s + r.minutos, 0);
-    const top = topicos(l), fin = top.filter(k => k.status === 'finalizado').length;
-    const p = Math.min(100, plan ? Math.round(100 * feito / plan) : 0);
-    return `<tr><td><span class="dot" style="--c:${m.cor}"></span>${esc(m.nome)}</td><td class="small muted">${dias}</td>
-      <td class="num">${fmtH(plan)}</td><td class="num">${fmtH(plan / Math.max(1, dias.split(',').length))}</td><td class="num">${fmtH(feito)}</td>
-      <td style="width:22%"><div class="bar"><i style="width:${p}%;--c:${m.cor}"></i></div></td><td class="num">${fin}/${top.length}</td></tr>`;
+    const tp = topicos(l), fin = tp.filter(k => k.status === 'finalizado').length;
+    const p = Math.min(100, Math.round(100 * feito / plan));
+    return `<tr><td><span class="mdot" style="--c:${m.cor}"></span>${esc(m.nome)}</td>
+      <td class="num">${hm(plan)}</td><td class="num muted">${hm(plan / Math.max(1, diasN))}</td><td class="num">${hm(feito)}</td>
+      <td style="width:22%"><div class="bar"><i style="width:${p}%;--c:${m.cor}"></i></div></td><td class="num muted">${fin}/${tp.length}</td></tr>`;
   }).join('');
-  return `<details class="panel" ${UI.metasOpen ? 'open' : ''} id="metas"><summary>Metas da semana por matéria</summary>
-    <div class="tbl-wrap" style="margin-top:10px"><table><thead><tr><th>Matéria</th><th>Dias</th><th class="num">Meta semanal</th><th class="num">Meta por dia de estudo</th><th class="num">Registrado</th><th>Progresso (horas)</th><th class="num">Tópicos</th></tr></thead>
-    <tbody>${linhas || '<tr><td colspan="7" class="muted">Sem metas nesta semana.</td></tr>'}</tbody></table></div>
-    <p class="small muted" style="margin:8px 0 0">Meta diária: ${fmtH(S.config.horasDia * 60)} por dia. Registre as horas na aba “Tempo de estudos”.</p></details>`;
+  return `<details class="bloco metas" ${UI.metasOpen ? 'open' : ''} id="metas"><summary>Metas da semana</summary>
+    <div class="tbl-wrap"><table><thead><tr><th>Matéria</th><th class="num">Semana</th><th class="num">Por dia</th><th class="num">Feito</th><th></th><th class="num">Tópicos</th></tr></thead>
+    <tbody>${linhas || '<tr><td colspan="6" class="muted">Sem metas nesta semana.</td></tr>'}</tbody></table></div>
+    <p class="small faint" style="margin-top:10px">Meta diária: ${hm(S.config.horasDia * 60)}. As horas feitas vêm da aba Tempo de estudos.</p></details>`;
 }
 
 /* ---------- Ciclos ---------- */
@@ -694,62 +799,60 @@ function renderCiclo() {
   const mapa = atribuirDias(cic, S.config.discursiva ? +S.config.redacaoMin || 0 : 0, [0, 1, 2, 3, 4, 5]);
   const totalAss = S.materias.reduce((s, m) => s + m.assuntos.length, 0);
   const cob = S.materias.reduce((s, m) => s + m.assuntos.filter(a => S.cards.some(k => k.assuntoId === a.id && k.tipo === 'conteudo')).length, 0);
-  let h = `<div class="kpis">
-    <div class="kpi"><b>${fmtH(S.config.horasDia * 60)}</b><span>por dia</span></div>
-    <div class="kpi"><b>${fmtH(minutosConteudoSemana())}</b><span>conteúdo novo por semana (seg–sáb${S.config.discursiva ? ', descontada a redação' : ''})</span></div>
-    <div class="kpi"><b>${wC}</b><span>semanas de conteúdo + ${W - wC} de revisão</span></div>
-    <div class="kpi"><b>${cob}/${totalAss}</b><span>assuntos cobertos no cronograma ${cob === totalAss ? '✓' : '⚠'}</span></div>
-  </div>
-  <div class="panel"><h3>Ciclo semanal (peso × incidência)</h3>
-  <div class="tbl-wrap"><table><thead><tr><th>Matéria</th><th class="num">Questões</th><th class="num">Peso</th><th>Incidência</th><th class="num">Relevância</th><th class="num">% do ciclo</th><th class="num">Tempo/semana</th><th>Dias sugeridos</th></tr></thead><tbody>`;
+  let h = `<div class="sec-h"><div><p class="eyebrow">peso × incidência</p><h2>Ciclo semanal</h2>
+    <p class="sub">${hm(minutosConteudoSemana())} de conteúdo novo por semana · ${wC} semanas de conteúdo + ${W - wC} de revisão · ${cob} de ${totalAss} assuntos no cronograma</p></div></div>
+  <div class="bloco">
+    <div class="distrib">${cic.map(x => `<i style="--c:${x.m.cor};flex:${x.pct}" title="${esc(x.m.nome)} ${(x.pct * 100).toFixed(0)}%"></i>`).join('')}</div>
+    <div class="tbl-wrap"><table><thead><tr><th>Matéria</th><th class="num">Questões</th><th class="num">Peso</th><th>Incidência</th><th class="num">Ciclo</th><th class="num">Por semana</th><th>Dias</th></tr></thead><tbody>`;
   for (const x of cic) {
-    h += `<tr><td><span class="dot" style="--c:${x.m.cor}"></span>${esc(x.m.nome)}</td><td class="num">${x.m.questoes}</td><td class="num">${x.m.peso}</td>
-      <td><span class="tag inc-${x.m.incidencia}">${INC_LBL[x.m.incidencia]}</span></td><td class="num">${x.rel}</td>
-      <td class="num">${(x.pct * 100).toFixed(1).replace('.', ',')}%</td><td class="num"><b>${fmtH(x.min)}</b></td>
-      <td class="small">${(mapa[x.m.id] || []).map(d => DIAS[d]).join(', ')}</td></tr>`;
+    h += `<tr><td><span class="mdot" style="--c:${x.m.cor}"></span>${esc(x.m.nome)}</td><td class="num muted">${x.m.questoes}</td><td class="num muted">${x.m.peso}</td>
+      <td><span class="tag-inc inc inc-${x.m.incidencia}">${INC_LBL[x.m.incidencia]}</span></td>
+      <td class="num muted">${(x.pct * 100).toFixed(0)}%</td><td class="num"><b style="font-weight:500">${hm(x.min)}</b></td>
+      <td class="small muted">${(mapa[x.m.id] || []).map(d => DIAS[d]).join(' · ')}</td></tr>`;
   }
-  h += `</tbody></table></div><p class="small muted">Relevância = questões × peso × incidência (alta 3, média 2, baixa 1). Altere as horas/dia no topo para recalcular. Pares que não ficam no mesmo dia: ${(S.config.paresProibidos || []).map(([a, b]) => `${esc(mat(a)?.nome || a)} × ${esc(mat(b)?.nome || b)}`).join('; ') || 'nenhum'}.</p></div>`;
+  h += `</tbody></table></div><p class="small faint" style="margin-top:14px">Relevância = questões × peso × incidência (alta 3, média 2, baixa 1). Pares que não caem no mesmo dia: ${(S.config.paresProibidos || []).map(([a, b]) => `${esc(mat(a)?.nome || a)} × ${esc(mat(b)?.nome || b)}`).join('; ') || 'nenhum'}.</p></div>`;
 
-  h += `<div class="panel"><h3>Assuntos em cada ciclo (semana)</h3><p class="small muted" style="margin-top:0">Verde = finalizado. Todos os assuntos do edital entram até a semana ${wC}.</p>`;
+  h += `<div class="bloco"><h3>Assuntos em cada semana</h3><p class="sub">Abra uma matéria para ver a sequência. Verde = finalizado.</p>`;
   for (const m of S.materias) {
     const porSem = {};
     S.cards.filter(k => k.materiaId === m.id && k.tipo === 'conteudo').forEach(k => { const w = semanaDe(k.data); (porSem[w] ||= new Map()).set(k.assuntoId || k.id, k); });
-    const linhas = Object.keys(porSem).map(Number).sort((a, b) => a - b).map(w => `<tr><td class="small" style="white-space:nowrap">S${w + 1}</td><td><div class="chips">${[...porSem[w].values()].map(k => {
+    const linhas = Object.keys(porSem).map(Number).sort((a, b) => a - b).map(w => `<tr><td class="small faint" style="white-space:nowrap;width:60px">Sem. ${w + 1}</td><td><div class="chips">${[...porSem[w].values()].map(k => {
       const nome = k.assuntoId ? assunto(k.assuntoId)?.a.nome || k.titulo : k.titulo;
       return `<span class="chip ${statusAssunto(k.assuntoId) === 'finalizado' || k.status === 'finalizado' ? 'ok' : ''}">${esc(nome)}</span>`; }).join('')}</div></td></tr>`).join('');
-    h += `<details><summary><span class="dot" style="--c:${m.cor}"></span>${esc(m.nome)} <span class="muted small">(${m.assuntos.length} assuntos)</span></summary>
-      <table style="margin:6px 0 12px"><tbody>${linhas || '<tr><td class="muted">Nenhum assunto planejado.</td></tr>'}</tbody></table></details>`;
+    h += `<details style="border-top:1px solid var(--line-2);padding:12px 0"><summary style="cursor:pointer;font-family:var(--f-head);font-weight:500"><span class="mdot" style="--c:${m.cor}"></span>${esc(m.nome)} <span class="faint small" style="font-family:var(--f-body);font-weight:400">· ${m.assuntos.length} assuntos</span></summary>
+      <table style="margin-top:8px"><tbody>${linhas || '<tr><td class="muted">Nenhum assunto planejado.</td></tr>'}</tbody></table></details>`;
   }
   return h + `</div>`;
 }
 
 /* ---------- Matérias ---------- */
 function renderMaterias() {
-  let h = `<div class="row" style="margin-bottom:12px"><h2 style="margin:0">Matérias e assuntos (ordem do edital)</h2><span class="spacer"></span>
-    <button data-acao="addMat">+ Matéria</button><button class="pri" data-acao="regerar">Regerar cronograma</button></div>`;
-  if (S.premissas?.length) h += `<details class="panel"><summary>Premissas da análise</summary><ul>${S.premissas.map(p => `<li>${esc(p)}</li>`).join('')}</ul></details>`;
+  let h = `<div class="sec-h"><div><p class="eyebrow">na ordem do edital</p><h2>Matérias</h2><p class="sub">Mudou peso ou incidência? O ciclo recalcula na hora. Para redistribuir as semanas, regere o cronograma.</p></div>
+    <div class="row"><button class="btn ghost" data-acao="addMat">+ Matéria</button><button class="btn" data-acao="regerar">Regerar cronograma</button></div></div>`;
+  if (S.premissas?.length) h += `<details class="bloco"><summary>Premissas da análise</summary><ul class="muted" style="margin:0;padding-left:18px">${S.premissas.map(p => `<li>${esc(p)}</li>`).join('')}</ul></details>`;
   S.materias.forEach((m, mi) => {
     const fin = m.assuntos.filter(a => statusAssunto(a.id) === 'finalizado').length;
-    h += `<div class="panel"><div class="mat-h">
-      <input type="color" value="${m.cor}" data-mcor="${m.id}" title="Cor da matéria">
-      <h3>${mi + 1}. ${esc(m.nome)}</h3>
-      <label class="small muted">Questões <input type="number" min="0" style="width:64px" value="${m.questoes}" data-mq="${m.id}"></label>
-      <label class="small muted">Peso <input type="number" min="0" step="0.5" style="width:64px" value="${m.peso}" data-mp="${m.id}"></label>
-      <label class="small muted">Incidência <select data-minc="${m.id}">${Object.keys(INC).map(i => `<option value="${i}" ${m.incidencia === i ? 'selected' : ''}>${INC_LBL[i]}</option>`).join('')}</select></label>
-      <span class="spacer"></span><span class="small muted">${fin}/${m.assuntos.length} finalizados</span>
-      <button class="icon" data-renmat="${m.id}" title="Renomear">✎</button><button class="icon danger" data-delmat="${m.id}" title="Excluir matéria">🗑</button>
+    h += `<div class="bloco"><div class="mat-h">
+      <input type="color" value="${m.cor}" data-mcor="${m.id}" title="Cor da matéria" aria-label="Cor da matéria">
+      <h3>${esc(m.nome)}</h3>
+      <span class="small faint">${fin}/${m.assuntos.length} finalizados</span>
+      <span class="spacer"></span>
+      <label>Questões <input type="number" min="0" value="${m.questoes}" data-mq="${m.id}"></label>
+      <label>Peso <input type="number" min="0" step="0.5" value="${m.peso}" data-mp="${m.id}"></label>
+      <label>Incidência <select data-minc="${m.id}">${Object.keys(INC).map(i => `<option value="${i}" ${m.incidencia === i ? 'selected' : ''}>${INC_LBL[i]}</option>`).join('')}</select></label>
+      <button class="ico" data-renmat="${m.id}" title="Renomear" aria-label="Renomear">✎</button><button class="ico danger" data-delmat="${m.id}" title="Excluir matéria" aria-label="Excluir matéria">×</button>
     </div>
-    <div class="tbl-wrap"><table><thead><tr><th style="width:40px">#</th><th>Assunto</th><th style="width:130px">Incidência</th><th style="width:120px">Status</th><th class="num" style="width:110px">Planejado</th><th style="width:70px"></th></tr></thead><tbody>
+    <div class="tbl-wrap"><table><tbody>
     ${m.assuntos.map((a, ai) => {
       const st = statusAssunto(a.id), plan = S.cards.filter(k => k.assuntoId === a.id && k.tipo === 'conteudo').reduce((s, k) => s + k.minutos, 0);
-      return `<tr><td class="muted">${mi + 1}.${ai + 1}</td><td>${esc(a.nome)}</td>
-        <td><select data-ainc="${a.id}">${Object.keys(INC).map(i => `<option value="${i}" ${a.incidencia === i ? 'selected' : ''}>${INC_LBL[i]}</option>`).join('')}</select></td>
-        <td><span class="st st-${st}">${st === 'nao' ? 'Não planejado' : STATUS[st]}</span></td><td class="num">${fmtH(plan)}</td>
-        <td><button class="icon" data-renass="${a.id}" title="Renomear">✎</button><button class="icon danger" data-delass="${a.id}" title="Excluir">🗑</button></td></tr>`;
+      return `<tr><td class="faint small" style="width:44px">${mi + 1}.${ai + 1}</td><td>${esc(a.nome)}</td>
+        <td style="width:120px"><select data-ainc="${a.id}" aria-label="Incidência">${Object.keys(INC).map(i => `<option value="${i}" ${a.incidencia === i ? 'selected' : ''}>${INC_LBL[i]}</option>`).join('')}</select></td>
+        <td style="width:110px"><span class="st st-${st}">${st === 'nao' ? 'não planejado' : STATUS[st]}</span></td><td class="num muted small" style="width:70px">${hm(plan)}</td>
+        <td style="width:70px;white-space:nowrap"><button class="ico" data-renass="${a.id}" title="Renomear" aria-label="Renomear">✎</button><button class="ico danger" data-delass="${a.id}" title="Excluir" aria-label="Excluir">×</button></td></tr>`;
     }).join('')}
-    </tbody></table></div><button style="margin-top:8px" data-addass="${m.id}">+ Assunto</button></div>`;
+    </tbody></table></div><button class="add" data-addass="${m.id}">+ assunto</button></div>`;
   });
-  return h + `<p class="small muted">Alterações de peso, incidência e assuntos atualizam o ciclo na hora; clique em “Regerar cronograma” para redistribuir os blocos nas semanas.</p>`;
+  return h;
 }
 
 /* ---------- Estatísticas ---------- */
@@ -758,58 +861,59 @@ function renderStats() {
   const totPlan = S.cards.reduce((s, k) => s + k.minutos, 0), totReal = S.registros.reduce((s, r) => s + r.minutos, 0);
   const q = S.registros.reduce((s, r) => s + (+r.questoes || 0), 0), e = S.registros.reduce((s, r) => s + (+r.erros || 0), 0);
   const w = Math.min(Math.max(0, semanaDe(hoje())), W - 1);
-  let h = `<div class="kpis">
-    <div class="kpi"><b>${pctFin(todos)}%</b><span>progresso total (${todos.filter(k => k.status === 'finalizado').length}/${todos.length} tópicos)</span></div>
-    <div class="kpi"><b>${pctFin(topicos(cardsSemana(w)))}%</b><span>progresso da semana atual (S${w + 1})</span></div>
-    <div class="kpi"><b>${fmtH(totReal)}</b><span>estudadas de ${fmtH(totPlan)} planejadas</span></div>
-    <div class="kpi"><b>${q}</b><span>questões · acertos ${pctHtml(acertos(q, e))}</span></div>
+  const ac = acertos(q, e);
+  let h = `<div class="sec-h"><div><p class="eyebrow">atualiza sozinho</p><h2>Estatísticas</h2></div></div>
+  <div class="kpis">
+    <div class="kpi"><span class="num-big">${pctFin(todos)}%</span><span>do plano finalizado</span></div>
+    <div class="kpi"><span class="num-big">${pctFin(topicos(cardsSemana(w)))}%</span><span>da semana ${w + 1}</span></div>
+    <div class="kpi"><span class="num-big">${hm(totReal)}</span><span>estudadas de ${hm(totPlan)}</span></div>
+    <div class="kpi"><span class="num-big">${ac === null ? '—' : String(ac).replace('.', ',') + '%'}</span><span>de acertos em ${q} questões</span></div>
   </div>`;
-  const barra = (nome, cor, p, v) => `<div class="barrow"><div>${cor ? `<span class="dot" style="--c:${cor}"></span>` : ''}${esc(nome)}</div><div class="bar"><i style="width:${Math.min(100, p)}%;--c:${cor || 'var(--accent)'}"></i></div><div class="v">${v}</div></div>`;
-  const dupla = (nome, cor, plan, real, max) => `<div class="barrow"><div>${cor ? `<span class="dot" style="--c:${cor}"></span>` : ''}${esc(nome)}</div>
-    <div class="bar dupla" style="--c:${cor || 'var(--accent)'}"><i class="plan" style="width:${max ? 100 * plan / max : 0}%"></i><i class="real" style="width:${max ? Math.min(100, 100 * real / max) : 0}%"></i></div><div class="v">${fmtH(real)} / ${fmtH(plan)}</div></div>`;
+  const barra = (nome, cor, p, v) => `<div class="barrow"><div>${cor ? `<span class="mdot" style="--c:${cor}"></span>` : ''}${esc(nome)}</div><div class="bar"><i style="width:${Math.min(100, p)}%;--c:${cor || 'var(--ink)'}"></i></div><div class="v">${v}</div></div>`;
+  const dupla = (nome, cor, plan, real, max) => `<div class="barrow"><div>${cor ? `<span class="mdot" style="--c:${cor}"></span>` : ''}${esc(nome)}</div>
+    <div class="bar" style="--c:${cor || 'var(--ink)'}"><i class="plan" style="width:${100 * plan / max}%"></i><i style="width:${Math.min(100, 100 * real / max)}%"></i></div><div class="v">${hm(real)} / ${hm(plan)}</div></div>`;
+  const nf = l => l.filter(k => k.status === 'finalizado').length;
 
-  h += `<div class="panel"><h3>Progresso por matéria (% de tópicos finalizados)</h3>`;
-  S.materias.forEach(m => { const l = todos.filter(k => k.materiaId === m.id); h += barra(m.nome, m.cor, pctFin(l), `${pctFin(l)}% · ${l.filter(k => k.status === 'finalizado').length}/${l.length}`); });
-  h += `</div><div class="panel"><h3>Progresso semanal</h3>`;
-  for (let i = 0; i < W; i++) { const l = topicos(cardsSemana(i)); h += barra(`S${i + 1} · ${fmtCurto(dataDe(i, 0))}${semanaRevisao(i) ? ' (revisão)' : ''}`, i === w ? 'var(--accent)' : '#8b8fa0', pctFin(l), `${pctFin(l)}% · ${l.filter(k => k.status === 'finalizado').length}/${l.length}`); }
-  h += `</div><div class="panel"><h3>Horas estudadas × planejadas por matéria</h3><p class="small muted" style="margin-top:0">Barra clara: planejado · barra cheia: estudado</p>`;
+  h += `<div class="bloco"><h3>Progresso por matéria</h3><p class="sub">% de tópicos finalizados</p><div class="barras">`;
+  S.materias.forEach(m => { const l = todos.filter(k => k.materiaId === m.id); h += barra(m.nome, m.cor, pctFin(l), `${pctFin(l)}% · ${nf(l)}/${l.length}`); });
+  h += `</div></div><div class="bloco"><h3>Horas estudadas × planejadas</h3><p class="sub">Trilho claro: planejado · trilho cheio: estudado</p><div class="barras">`;
   const pm = S.materias.map(m => ({ m, plan: S.cards.filter(k => k.materiaId === m.id).reduce((s, k) => s + k.minutos, 0), real: S.registros.filter(r => r.materiaId === m.id).reduce((s, r) => s + r.minutos, 0) }));
   const maxM = Math.max(1, ...pm.map(x => Math.max(x.plan, x.real)));
   pm.forEach(x => h += dupla(x.m.nome, x.m.cor, x.plan, x.real, maxM));
-  h += `</div><div class="panel"><h3>Horas estudadas × planejadas por semana</h3>`;
-  const ps = Array.from({ length: W }, (_, i) => ({ i, plan: cardsSemana(i).reduce((s, k) => s + k.minutos, 0), real: regsSemana(i).reduce((s, r) => s + r.minutos, 0) }));
+  h += `</div></div><details class="bloco"><summary>Semana a semana</summary><div class="barras">`;
+  const ps = Array.from({ length: W }, (_, i) => ({ i, l: topicos(cardsSemana(i)), plan: cardsSemana(i).reduce((s, k) => s + k.minutos, 0), real: regsSemana(i).reduce((s, r) => s + r.minutos, 0) }));
   const maxS = Math.max(1, ...ps.map(x => Math.max(x.plan, x.real)));
-  ps.forEach(x => h += dupla(`S${x.i + 1} · ${fmtCurto(dataDe(x.i, 0))}`, x.i === w ? 'var(--accent)' : '#8b8fa0', x.plan, x.real, maxS));
-  h += `</div><div class="panel"><h3>Desempenho em questões por matéria</h3><div class="tbl-wrap"><table><thead><tr><th>Matéria</th><th class="num">Questões</th><th class="num">Erros</th><th class="num">Acertos</th></tr></thead><tbody>`;
+  ps.forEach(x => { const cor = x.i === w ? 'var(--accent)' : null; h += barra(`Semana ${x.i + 1}${semanaRevisao(x.i) ? ' · revisão' : ''}`, cor, pctFin(x.l), `${pctFin(x.l)}% · ${nf(x.l)}/${x.l.length}`) + dupla('horas', cor, x.plan, x.real, maxS); });
+  h += `</div></details><div class="bloco"><h3>Questões por matéria</h3><div class="tbl-wrap"><table><thead><tr><th>Matéria</th><th class="num">Questões</th><th class="num">Erros</th><th class="num">Acertos</th></tr></thead><tbody>`;
   S.materias.forEach(m => { const l = S.registros.filter(r => r.materiaId === m.id); const q = l.reduce((s, r) => s + (+r.questoes || 0), 0), e = l.reduce((s, r) => s + (+r.erros || 0), 0);
-    h += `<tr><td><span class="dot" style="--c:${m.cor}"></span>${esc(m.nome)}</td><td class="num">${q}</td><td class="num">${e}</td><td class="num">${pctHtml(acertos(q, e))}</td></tr>`; });
+    h += `<tr><td><span class="mdot" style="--c:${m.cor}"></span>${esc(m.nome)}</td><td class="num muted">${q}</td><td class="num muted">${e}</td><td class="num">${pctHtml(acertos(q, e))}</td></tr>`; });
   return h + `</tbody></table></div></div>`;
 }
 
 /* ---------- Tempo de estudos ---------- */
 function opcoesMat(sel) { return S.materias.map(m => `<option value="${m.id}" ${m.id === sel ? 'selected' : ''}>${esc(m.nome)}</option>`).join(''); }
-function opcoesAss(mid, sel) { const m = mat(mid); return `<option value="">— geral da matéria —</option>` + (m ? m.assuntos.map(a => `<option value="${a.id}" ${a.id === sel ? 'selected' : ''}>${esc(a.nome)}</option>`).join('') : ''); }
+function opcoesAss(mid, sel) { const m = mat(mid); return `<option value="">Geral da matéria</option>` + (m ? m.assuntos.map(a => `<option value="${a.id}" ${a.id === sel ? 'selected' : ''}>${esc(a.nome)}</option>`).join('') : ''); }
 function renderTempo() {
   const r = UI.editReg ? S.registros.find(x => x.id === UI.editReg) : null;
   const mid = r ? r.materiaId : S.materias[0]?.id;
-  let h = `<div class="panel"><h3>${r ? 'Editar registro' : 'Novo registro de estudo'}</h3>
+  let h = `<div class="sec-h"><div><p class="eyebrow">registro diário</p><h2>Tempo de estudos</h2></div></div>
+  <div class="bloco"><h3>${r ? 'Editar registro' : 'Registrar estudo'}</h3><p class="sub">Acertos = (questões − erros) ÷ questões · <span class="pct r">abaixo de 70%</span> <span class="pct y">70 a 80%</span> <span class="pct g">acima de 80%</span></p>
     <form id="formReg" class="form-grid">
       <label>Data <input type="date" name="data" required value="${r ? r.data : hoje()}"></label>
       <label>Disciplina <select name="materiaId" id="regMat" required>${opcoesMat(mid)}</select></label>
       <label style="grid-column:span 2">Assunto <select name="assuntoId" id="regAss">${opcoesAss(mid, r?.assuntoId)}</select></label>
-      <label>Horas (00:00h) <input name="horas" required placeholder="01:30h" value="${r ? fmtH(r.minutos) : ''}" pattern="\\s*\\d{1,3}:[0-5]\\d\\s*[hH]?\\s*"></label>
-      <label>Questões respondidas <input type="number" name="questoes" min="0" value="${r ? r.questoes : 0}"></label>
+      <label>Horas (00:00h) <input name="horas" required placeholder="01:30h" value="${r ? fmtH(r.minutos) : ''}"></label>
+      <label>Questões <input type="number" name="questoes" min="0" value="${r ? r.questoes : 0}"></label>
       <label>Erros <input type="number" name="erros" min="0" value="${r ? r.erros : 0}"></label>
-      <label>Acertos <span id="prevPct" style="padding:6px 0">${pctHtml(r ? acertos(r.questoes, r.erros) : null)}</span></label>
-      <div class="row"><button class="pri" type="submit">${r ? 'Salvar alterações' : 'Registrar'}</button>${r ? '<button type="button" data-acao="cancelReg">Cancelar</button>' : ''}</div>
-    </form>
-    <p class="small muted" style="margin-bottom:0">Acertos = (questões − erros) ÷ questões. <span class="pct r">&lt; 70%</span> <span class="pct y">70–80%</span> <span class="pct g">&gt; 80%</span></p></div>`;
+      <label>Acertos <span id="prevPct" style="padding:8px 0">${pctHtml(r ? acertos(r.questoes, r.erros) : null)}</span></label>
+      <div class="row" style="grid-column:1/-1"><button class="btn pri" type="submit">${r ? 'Salvar alterações' : 'Registrar'}</button>${r ? '<button class="btn ghost" type="button" data-acao="cancelReg">Cancelar</button>' : ''}</div>
+    </form></div>`;
   const l = [...S.registros].sort((a, b) => b.data.localeCompare(a.data) || (b.criado || 0) - (a.criado || 0));
-  h += `<div class="panel"><h3>Histórico</h3><div class="tbl-wrap"><table><thead><tr><th>Data</th><th>Disciplina</th><th>Assunto</th><th class="num">Horas</th><th class="num">Questões</th><th class="num">Erros</th><th class="num">Acertos</th><th></th></tr></thead><tbody>
-    ${l.map(x => { const m = mat(x.materiaId); return `<tr><td>${fmtBR(x.data)}</td><td>${m ? `<span class="dot" style="--c:${m.cor}"></span>${esc(m.nome)}` : '—'}</td>
-      <td class="small">${esc(x.assuntoId ? assunto(x.assuntoId)?.a.nome || '—' : '—')}</td><td class="num">${fmtH(x.minutos)}</td><td class="num">${x.questoes}</td><td class="num">${x.erros}</td>
-      <td class="num">${pctHtml(acertos(x.questoes, x.erros))}</td><td style="white-space:nowrap"><button class="icon" data-editreg="${x.id}" title="Editar">✎</button><button class="icon danger" data-delreg="${x.id}" title="Excluir">🗑</button></td></tr>`; }).join('') || '<tr><td colspan="8" class="muted">Nenhum registro ainda.</td></tr>'}
-    </tbody></table></div></div>`;
+  h += `<div class="bloco"><h3>Histórico</h3>${l.length ? '' : '<p class="sub" style="margin:6px 0 0">Seus registros aparecem aqui.</p>'}${l.length ? `<div class="tbl-wrap"><table><thead><tr><th>Data</th><th>Disciplina</th><th>Assunto</th><th class="num">Horas</th><th class="num">Questões</th><th class="num">Erros</th><th class="num">Acertos</th><th></th></tr></thead><tbody>
+    ${l.map(x => { const m = mat(x.materiaId); return `<tr><td class="muted">${fmtBR(x.data)}</td><td>${m ? `<span class="mdot" style="--c:${m.cor}"></span>${esc(m.nome)}` : '—'}</td>
+      <td class="small muted">${esc(x.assuntoId ? assunto(x.assuntoId)?.a.nome || '—' : '—')}</td><td class="num">${fmtH(x.minutos)}</td><td class="num muted">${x.questoes}</td><td class="num muted">${x.erros}</td>
+      <td class="num">${pctHtml(acertos(x.questoes, x.erros))}</td><td style="white-space:nowrap;width:70px"><button class="ico" data-editreg="${x.id}" title="Editar" aria-label="Editar">✎</button><button class="ico danger" data-delreg="${x.id}" title="Excluir" aria-label="Excluir">×</button></td></tr>`; }).join('')}
+    </tbody></table></div>` : ''}</div>`;
   return h;
 }
 function montarTempo() {
@@ -820,8 +924,8 @@ function montarTempo() {
   f.onsubmit = ev => {
     ev.preventDefault();
     const min = parseH(f.horas.value), q = +f.questoes.value || 0, e = +f.erros.value || 0;
-    if (min === null) return toast('Use o formato 00:00h para as horas (ex.: 01:30h).');
-    if (e > q) return toast('O número de erros não pode ser maior que o de questões.');
+    if (min === null) return toast('Use o formato 00:00h (ex.: 01:30h).');
+    if (e > q) return toast('Erros não pode passar do total de questões.');
     const dados = { data: f.data.value, materiaId: f.materiaId.value, assuntoId: f.assuntoId.value || null, minutos: min, questoes: q, erros: e };
     if (UI.editReg) { Object.assign(S.registros.find(x => x.id === UI.editReg), dados); UI.editReg = null; toast('Registro atualizado.'); }
     else { S.registros.push({ id: uid(), criado: Date.now(), ...dados }); toast('Registro salvo.'); }
@@ -836,19 +940,19 @@ function confirmar(msg) { return window.confirm(msg); }
 
 function modalCard(card, dataPadrao) {
   const k = card || { materiaId: S.materias[0]?.id, assuntoId: '', titulo: '', data: dataPadrao || hoje(), minutos: 60, status: 'afazer', como: 'Questões', tipo: 'conteudo' };
-  abrirModal(`<h2>${card ? 'Editar tópico' : 'Adicionar tópico'}</h2>
+  abrirModal(`<h2>${card ? 'Editar tópico' : 'Novo tópico'}</h2>
     <form id="formCard" class="form-grid">
+      <label>Matéria <select name="materiaId" id="cMat"><option value="">Nenhuma</option>${opcoesMat(k.materiaId)}</select></label>
       <label>Tipo <select name="tipo">${Object.entries(TIPOS).map(([v, n]) => `<option value="${v}" ${k.tipo === v ? 'selected' : ''}>${n}</option>`).join('')}</select></label>
-      <label>Matéria <select name="materiaId" id="cMat"><option value="">— nenhuma —</option>${opcoesMat(k.materiaId)}</select></label>
       <label class="full">Assunto <select name="assuntoId" id="cAss">${opcoesAss(k.materiaId, k.assuntoId)}</select></label>
-      <label class="full">Título <input name="titulo" value="${esc(k.titulo)}" placeholder="Deixe vazio para usar o nome do assunto"></label>
+      <label class="full">Título <input name="titulo" value="${esc(k.titulo)}" placeholder="Vazio = nome do assunto"></label>
       <label>Data <input type="date" name="data" required value="${k.data}"></label>
       <label>Duração (00:00h) <input name="horas" required value="${fmtH(k.minutos)}"></label>
       <label>Status <select name="status">${Object.entries(STATUS).map(([v, n]) => `<option value="${v}" ${k.status === v ? 'selected' : ''}>${n}</option>`).join('')}</select></label>
       <label>Como concluir <select name="como">${COMO.map(o => `<option ${k.como === o ? 'selected' : ''}>${o}</option>`).join('')}</select></label>
       <label class="full">Anotações <textarea name="notas" rows="2">${esc(k.notas || '')}</textarea></label>
     </form>
-    <div class="modal-f"><button data-acao="fechar">Cancelar</button><button class="pri" id="salvarCard">Salvar</button></div>`);
+    <div class="modal-f"><button class="btn ghost" data-acao="fechar">Cancelar</button><button class="btn pri" id="salvarCard">Salvar</button></div>`);
   const f = $('#formCard');
   $('#cMat').onchange = e => { $('#cAss').innerHTML = opcoesAss(e.target.value); };
   $('#salvarCard').onclick = () => {
@@ -861,28 +965,29 @@ function modalCard(card, dataPadrao) {
     if (v.length && (!card || card.data !== novo.data || card.materiaId !== mid) && !confirmar(`Atenção:\n• ${v.join('\n• ')}\n\nSalvar mesmo assim?`)) return;
     if (card) Object.assign(card, novo); else S.cards.push(alvo);
     setStatus(alvo, f.status.value);
+    UI.aberto = novo.data;
     salvar(); fecharModal(); render(); toast(card ? 'Tópico atualizado.' : 'Tópico adicionado.');
   };
 }
 
 function modalConfig() {
   const c = S.config;
-  const pares = (c.paresProibidos || []).map((p, i) => `<div class="row" style="margin-bottom:6px"><select data-par="${i}" data-lado="0">${opcoesMat(p[0])}</select> × <select data-par="${i}" data-lado="1">${opcoesMat(p[1])}</select><button class="icon danger" type="button" data-delpar="${i}">🗑</button></div>`).join('');
+  const pares = (c.paresProibidos || []).map((p, i) => `<div class="row" style="margin-bottom:6px"><select data-par="${i}" data-lado="0">${opcoesMat(p[0])}</select><span class="faint">×</span><select data-par="${i}" data-lado="1">${opcoesMat(p[1])}</select><button class="ico danger" type="button" data-delpar="${i}" aria-label="Remover par">×</button></div>`).join('');
   abrirModal(`<h2>Configurações</h2>
     <form id="formCfg" class="form-grid">
-      <label class="full">Concurso / cargo <input name="concurso" value="${esc(c.concurso)}"></label>
+      <label class="full">Concurso e cargo <input name="concurso" value="${esc(c.concurso)}"></label>
       <label>Banca <input name="banca" value="${esc(c.banca)}"></label>
       <label>Início dos estudos <input type="date" name="inicio" value="${c.inicio}" required></label>
-      <label>Semanas (se prova a definir) <input type="number" name="semanas" min="1" max="104" value="${c.semanas}"></label>
+      <label>Semanas (prova a definir) <input type="number" name="semanas" min="1" max="104" value="${c.semanas}"></label>
       <label>Máx. disciplinas por dia <input type="number" name="max" min="1" max="6" value="${c.maxDisciplinasDia}"></label>
-      <label><span><input type="checkbox" name="discursiva" ${c.discursiva ? 'checked' : ''}> Há prova discursiva (redação aos sábados)</span></label>
+      <label style="flex-direction:row;align-items:center;gap:8px"><input type="checkbox" name="discursiva" ${c.discursiva ? 'checked' : ''}> Tem discursiva (redação aos sábados)</label>
       <label>Redação no sábado (min) <input type="number" name="redacaoMin" min="0" step="15" value="${c.redacaoMin}"></label>
-      <label class="full">Revisões espaçadas (dias, separados por vírgula) <input name="revs" value="${(c.revisoesDias || [1, 7, 30]).join(', ')}"></label>
-      <div class="full campo">Pares que não podem cair no mesmo dia<div id="pares">${pares || '<span class="muted">Nenhum.</span>'}</div><button type="button" data-acao="addPar" style="align-self:flex-start">+ Par</button></div>
+      <label class="full">Revisões espaçadas (dias) <input name="revs" value="${(c.revisoesDias || [1, 7, 30]).join(', ')}"></label>
+      <div class="full campo">Matérias que não caem no mesmo dia<div id="pares">${pares || '<span class="faint">Nenhum par.</span>'}</div><button type="button" class="btn ghost" data-acao="addPar" style="align-self:flex-start;padding-left:0">+ par</button></div>
     </form>
-    <div class="modal-f" style="justify-content:space-between;flex-wrap:wrap">
-      <div class="row"><button class="danger" data-acao="reset" title="Recarrega o JSON embutido no arquivo">Restaurar dados do arquivo</button></div>
-      <div class="row"><button data-acao="fechar">Cancelar</button><button data-acao="salvarCfgRegen">Salvar e regerar</button><button class="pri" data-acao="salvarCfg">Salvar</button></div>
+    <div class="modal-f"><button class="btn ghost" data-acao="fechar">Cancelar</button><button class="btn" data-acao="salvarCfgRegen">Salvar e regerar</button><button class="btn pri" data-acao="salvarCfg">Salvar</button></div>
+    <div class="modal-sec"><p class="eyebrow" style="margin-bottom:10px">Backup</p>
+      <div class="row"><button class="btn" id="btnExport">Exportar JSON</button><button class="btn" id="btnImport">Importar JSON</button><span class="spacer"></span><button class="btn ghost danger" data-acao="reset" title="Recarrega o JSON embutido no arquivo">Restaurar dados do arquivo</button></div>
     </div>`);
 }
 function lerConfig() {
@@ -910,64 +1015,70 @@ function importar(file) {
       if (!confirmar('Substituir todos os dados atuais pelo backup?')) return;
       S = d; S.cards ||= []; S.registros ||= []; S.meta ||= {};
       if (!S.cards.length) gerarCronograma();
-      UI.semana = null; salvar(); render(); toast('Backup importado.');
-    } catch (e) { toast('Arquivo inválido: use um JSON exportado pelo app ou no formato do JSON embutido.'); }
+      UI.semana = null; salvar(); fecharModal(); render(); toast('Backup importado.');
+    } catch (e) { toast('Arquivo inválido: use um JSON exportado pelo app.'); }
   };
   r.readAsText(file);
 }
 
 /* ================= Eventos ================= */
+function fecharCal() { if (UI.calOpen) { UI.calOpen = false; $('#calPop')?.classList.remove('open'); } }
 document.addEventListener('click', ev => {
-  const t = ev.target.closest('button,[data-cal]'); if (!t) {
-    if (UI.calOpen && !ev.target.closest('#calPop')) { UI.calOpen = false; $('#calPop')?.classList.remove('open'); }
-    return;
-  }
+  const t = ev.target.closest('button');
+  if (!ev.target.closest('#calPop') && !(t && t.id === 'btnCal')) fecharCal();
+  if (!t) return;
   const d = t.dataset;
   if (t.id === 'btnCal') { UI.calOpen = !UI.calOpen; $('#calPop').classList.toggle('open', UI.calOpen); return; }
-  if (d.cal) { const b = UI.calMes || (S.config.prova ? pd(S.config.prova) : new Date()); UI.calMes = new Date(b.getFullYear(), b.getMonth() + (+d.cal), 1); $('#calPop').innerHTML = renderCal(); return; }
-  if (UI.calOpen && !t.closest('#calPop')) { UI.calOpen = false; $('#calPop')?.classList.remove('open'); }
+  if (d.cal) { const b = UI.calMes || (S.config.prova ? pd(S.config.prova) : new Date()); UI.calMes = new Date(b.getFullYear(), b.getMonth() + (+d.cal), 1); const campos = $('#calPop .campos').outerHTML; $('#calPop').innerHTML = renderCal() + campos; return; }
   if (t.id === 'btnConfig') return modalConfig();
   if (t.id === 'btnExport') return exportar();
   if (t.id === 'btnImport') return $('#fileImport').click();
-  if (d.aba) { UI.aba = d.aba; salvar(); return render(); }
-  if (d.sem) { UI.semana = +d.sem; return render(); }
+  if (d.aba) { UI.aba = d.aba; salvar(); window.scrollTo({ top: 0 }); return render(); }
+  if (d.sem) { UI.semana = +d.sem; UI.aberto = null; return render(); }
   if (d.vista) { UI.vista = d.vista; salvar(); return render(); }
+  if (d.dia) { UI.aberto = diaAberto(d.dia, semanaDe(d.dia)) ? '' : d.dia; return render(); }
+  if (d.check) {
+    const k = S.cards.find(k => k.id === d.check);
+    if (k) { setStatus(k, k.status === 'finalizado' ? 'afazer' : 'finalizado'); render(); if (k.status === 'finalizado' && k.tipo !== 'conteudo') toast('Feito.'); }
+    return;
+  }
   if (d.add) return modalCard(null, d.add);
   if (d.edit) return modalCard(S.cards.find(k => k.id === d.edit));
   if (d.del) {
     const k = S.cards.find(k => k.id === d.del);
-    if (k && confirmar(`Excluir o tópico “${k.titulo}”?`)) { S.cards = S.cards.filter(x => x.id !== k.id && !(x.origemId === k.id && x.status === 'afazer')); salvar(); render(); toast('Tópico excluído.'); }
+    if (k && confirmar(`Excluir “${k.titulo}”?`)) { S.cards = S.cards.filter(x => x.id !== k.id && !(x.origemId === k.id && x.status === 'afazer')); salvar(); render(); toast('Tópico excluído.'); }
     return;
   }
   if (d.editreg) { UI.editReg = d.editreg; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
   if (d.delreg) { if (confirmar('Excluir este registro?')) { S.registros = S.registros.filter(r => r.id !== d.delreg); if (UI.editReg === d.delreg) UI.editReg = null; salvar(); render(); } return; }
-  if (d.addass) { const nome = prompt('Nome do novo assunto:'); if (nome?.trim()) { const m = mat(d.addass); m.assuntos.push({ id: m.id + '_' + uid(), nome: nome.trim(), incidencia: 'media' }); salvar(); render(); toast('Assunto adicionado. Regere o cronograma ou adicione-o como tópico.'); } return; }
+  if (d.addass) { const nome = prompt('Nome do novo assunto:'); if (nome?.trim()) { const m = mat(d.addass); m.assuntos.push({ id: m.id + '_' + uid(), nome: nome.trim(), incidencia: 'media' }); salvar(); render(); toast('Assunto adicionado. Regere o cronograma para incluí-lo.'); } return; }
   if (d.renass) { const x = assunto(d.renass); const nome = prompt('Novo nome do assunto:', x.a.nome); if (nome?.trim()) { x.a.nome = nome.trim(); salvar(); render(); } return; }
-  if (d.delass) { const x = assunto(d.delass); if (confirmar(`Excluir o assunto “${x.a.nome}” e seus tópicos no cronograma?`)) { x.m.assuntos = x.m.assuntos.filter(a => a.id !== d.delass); S.cards = S.cards.filter(k => k.assuntoId !== d.delass); salvar(); render(); } return; }
+  if (d.delass) { const x = assunto(d.delass); if (confirmar(`Excluir o assunto “${x.a.nome}” e seus tópicos?`)) { x.m.assuntos = x.m.assuntos.filter(a => a.id !== d.delass); S.cards = S.cards.filter(k => k.assuntoId !== d.delass); salvar(); render(); } return; }
   if (d.renmat) { const m = mat(d.renmat); const nome = prompt('Novo nome da matéria:', m.nome); if (nome?.trim()) { m.nome = nome.trim(); salvar(); render(); } return; }
-  if (d.delmat) { const m = mat(d.delmat); if (confirmar(`Excluir a matéria “${m.nome}”, seus assuntos e tópicos?`)) { S.materias = S.materias.filter(x => x.id !== m.id); S.cards = S.cards.filter(k => k.materiaId !== m.id); S.config.paresProibidos = S.config.paresProibidos.filter(p => !p.includes(m.id)); salvar(); render(); } return; }
+  if (d.delmat) { const m = mat(d.delmat); if (confirmar(`Excluir “${m.nome}”, seus assuntos e tópicos?`)) { S.materias = S.materias.filter(x => x.id !== m.id); S.cards = S.cards.filter(k => k.materiaId !== m.id); S.config.paresProibidos = S.config.paresProibidos.filter(p => !p.includes(m.id)); salvar(); render(); } return; }
   if (d.delpar !== undefined) { lerConfig(); S.config.paresProibidos.splice(+d.delpar, 1); return modalConfig(); }
   switch (d.acao) {
     case 'fechar': return fecharModal();
+    case 'ocultarAviso': S.meta.avisoOculto = true; salvar(); return render();
     case 'regerar':
-      if (confirmar('Regerar o cronograma? Os blocos automáticos serão redistribuídos e seus status reiniciados. Tópicos adicionados manualmente e registros de horas são mantidos.')) { gerarCronograma(); salvar(); render(); toast('Cronograma regerado.'); }
+      if (confirmar('Regerar o cronograma? Os blocos automáticos são redistribuídos e os status reiniciados. Tópicos criados por você e registros de horas ficam.')) { gerarCronograma(); S.meta.avisoOculto = true; salvar(); render(); toast('Cronograma regerado.'); }
       return;
     case 'addMat': {
       const nome = prompt('Nome da nova matéria:'); if (!nome?.trim()) return;
-      const cores = ['#0b7285', '#5f3dc4', '#e8590c', '#087f5b', '#a61e4d', '#1864ab', '#5c940d'];
+      const cores = ['#6E86A8', '#6B9A84', '#C08A64', '#9A7BA6', '#B9A15C', '#5F949A', '#A9756F'];
       S.materias.push({ id: 'm_' + uid(), nome: nome.trim(), cor: cores[S.materias.length % cores.length], questoes: 10, peso: 1, incidencia: 'media', assuntos: [] });
       salvar(); return render();
     }
     case 'addPar': lerConfig(); S.config.paresProibidos.push([S.materias[0]?.id, S.materias[1]?.id]); return modalConfig();
     case 'salvarCfg': case 'salvarCfgRegen': {
       const antes = numSemanas(); lerConfig();
-      if (d.acao === 'salvarCfgRegen') { gerarCronograma(); toast('Configurações salvas e cronograma regerado.'); }
-      else toast(numSemanas() !== antes ? 'Configurações salvas. O período mudou — regere o cronograma.' : 'Configurações salvas.');
+      if (d.acao === 'salvarCfgRegen') { gerarCronograma(); toast('Salvo e cronograma regerado.'); }
+      else toast(numSemanas() !== antes ? 'Salvo. O período mudou: regere o cronograma.' : 'Configurações salvas.');
       salvar(); fecharModal(); UI.semana = null; return render();
     }
     case 'reset':
-      if (confirmar('Restaurar os dados do JSON embutido no arquivo? Todo o progresso salvo no navegador será apagado (exporte um backup antes).')) {
-        S = dadosIniciais(); S.cards = []; S.registros = []; gerarCronograma(); salvar(); fecharModal(); UI.semana = null; render(); toast('Dados restaurados.');
+      if (confirmar('Restaurar os dados do JSON embutido no arquivo? O progresso salvo neste navegador será apagado (exporte um backup antes).')) {
+        S = dadosIniciais(); S.cards = []; S.registros = []; S.meta = {}; gerarCronograma(); salvar(); fecharModal(); UI.semana = null; render(); toast('Dados restaurados.');
       }
       return;
     case 'cancelReg': UI.editReg = null; return render();
@@ -988,35 +1099,34 @@ document.addEventListener('change', ev => {
   if (d.ainc) { assunto(d.ainc).a.incidencia = t.value; salvar(); return render(); }
 });
 document.addEventListener('toggle', ev => { if (ev.target.id === 'metas') UI.metasOpen = ev.target.open; }, true);
+document.addEventListener('keydown', ev => { if (ev.key === 'Escape') fecharCal(); });
 
-/* Drag and drop */
+/* Arrastar e soltar */
 let arrastando = null;
+const alvoDrop = el => el.closest?.('[data-drop-dia],[data-drop-st]');
 document.addEventListener('dragstart', ev => {
   const c = ev.target.closest?.('.card'); if (!c) return;
   arrastando = c.dataset.id; c.classList.add('drag');
   ev.dataTransfer.effectAllowed = 'move'; ev.dataTransfer.setData('text/plain', arrastando);
 });
-document.addEventListener('dragend', ev => { ev.target.closest?.('.card')?.classList.remove('drag'); $$('.col.over').forEach(x => x.classList.remove('over')); arrastando = null; });
+document.addEventListener('dragend', ev => { ev.target.closest?.('.card')?.classList.remove('drag'); $$('.over').forEach(x => x.classList.remove('over')); arrastando = null; });
 document.addEventListener('dragover', ev => {
-  const col = ev.target.closest?.('[data-drop-dia],[data-drop-st]'); if (!col || !arrastando) return;
-  ev.preventDefault(); $$('.col.over').forEach(x => x !== col && x.classList.remove('over')); col.classList.add('over');
+  const z = alvoDrop(ev.target); if (!z || !arrastando) return;
+  ev.preventDefault(); $$('.over').forEach(x => x !== z && x.classList.remove('over')); z.classList.add('over');
 });
-document.addEventListener('dragleave', ev => { const col = ev.target.closest?.('.col'); if (col && !col.contains(ev.relatedTarget)) col.classList.remove('over'); });
+document.addEventListener('dragleave', ev => { const z = alvoDrop(ev.target); if (z && !z.contains(ev.relatedTarget)) z.classList.remove('over'); });
 document.addEventListener('drop', ev => {
-  const col = ev.target.closest?.('[data-drop-dia],[data-drop-st]'); if (!col || !arrastando) return;
-  ev.preventDefault(); col.classList.remove('over');
+  const z = alvoDrop(ev.target); if (!z || !arrastando) return;
+  ev.preventDefault(); z.classList.remove('over');
   const card = S.cards.find(k => k.id === arrastando); if (!card) return;
-  if (col.dataset.dropDia) {
-    const dt = col.dataset.dropDia; if (dt === card.data) return;
+  if (z.dataset.dropDia) {
+    const dt = z.dataset.dropDia; if (dt === card.data) return;
     const v = checarMover(card, dt);
-    if (v.length) {
-      if (!confirmar(`Atenção — regra do planejamento:\n• ${v.join('\n• ')}\n\nMover mesmo assim?`)) return;
-      toast('Movido com alerta: ' + v[0]);
-    }
-    card.data = dt; salvar(); render();
+    if (v.length && !confirmar(`Isso quebra uma regra do plano:\n• ${v.join('\n• ')}\n\nMover mesmo assim?`)) return;
+    card.data = dt; salvar(); render(); toast(`Movido para ${DIAS_LONGOS[diaDe(dt)].toLowerCase()}.`);
   } else {
-    const antes = card.status; setStatus(card, col.dataset.dropSt);
-    if (antes !== card.status) { render(); if (card.status === 'finalizado' && card.tipo !== 'conteudo') toast('Tópico finalizado.'); }
+    const antes = card.status; setStatus(card, z.dataset.dropSt);
+    if (antes !== card.status) render();
   }
 });
 
