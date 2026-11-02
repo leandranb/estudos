@@ -242,6 +242,38 @@ dialog::backdrop{background:rgba(30,25,15,.32);backdrop-filter:blur(2px)}
 .modal-f{display:flex;justify-content:flex-end;gap:8px;margin-top:22px;flex-wrap:wrap}
 .modal-sec{margin-top:22px;padding-top:18px;border-top:1px solid var(--line-2)}
 
+/* Pomodoro: pílula flutuante discreta que abre um painel pequeno */
+#pomo{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));z-index:40;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.pomo-pill{display:inline-flex;align-items:center;gap:9px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:9px 16px 9px 12px;box-shadow:var(--shadow);font-variant-numeric:tabular-nums;font-weight:500;font-size:15px;transition:background .2s,color .2s}
+.pomo-pill:hover{border-color:var(--faint)}
+.pomo-pill .lbl{color:var(--faint);font-weight:400;font-family:var(--f-body);font-size:13px}
+.pomo-pill .pdot{width:8px;height:8px;border-radius:50%;background:var(--pc,var(--accent))}
+.pomo-pill.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.pomo-pill.on .lbl{color:color-mix(in srgb,var(--bg) 62%,transparent)}
+.pomo-pill.on .pdot{animation:respira 2.4s ease-in-out infinite}
+@keyframes respira{50%{opacity:.3}}
+.pomo-panel{width:300px;max-width:calc(100vw - 32px);background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:0 24px 60px -24px rgba(0,0,0,.4);padding:18px;display:flex;flex-direction:column;gap:14px}
+.pp-h{display:flex;justify-content:space-between;align-items:center}
+.pp-fases{align-self:center}
+.pp-ring{position:relative;width:156px;height:156px;align-self:center}
+.pp-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.pp-ring circle{fill:none;stroke-width:5}
+.pp-ring .trilho{stroke:var(--sunk)}
+.pp-ring .prog{stroke:var(--pc,var(--accent));stroke-linecap:round;transition:stroke-dashoffset .5s linear}
+.pp-t{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.pp-t span{font-family:var(--f-head);font-size:38px;font-weight:500;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1}
+.pp-t small{color:var(--muted);font-size:12.5px}
+.pp-ctrl{display:flex;justify-content:center;align-items:center;gap:4px}
+.pp-ctrl .btn.pri{min-width:110px}
+.pomo-panel select{width:100%}
+.pp-campos{display:flex;flex-direction:column;gap:8px}
+.pp-chk{font-size:13px;color:var(--muted);display:flex;gap:8px;align-items:center;cursor:pointer}
+.pomo-panel details summary{font-size:13px;color:var(--muted);cursor:pointer;list-style:none}
+.pomo-panel details summary::-webkit-details-marker{display:none}
+.pp-cfg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.pp-cfg label{font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+.pp-cfg input{padding:6px 8px}
+@media (prefers-reduced-motion:reduce){.pomo-pill.on .pdot{animation:none}}
 #toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,8px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:100;max-width:90vw}
 #toast.on{opacity:1;transform:translate(-50%,0)}
 @media (max-width:720px){
@@ -261,6 +293,7 @@ dialog::backdrop{background:rgba(30,25,15,.32);backdrop-filter:blur(2px)}
 </header>
 <main class="wrap" id="main"></main>
 <dialog id="modal"><div class="modal-c" id="modalBody"></div></dialog>
+<div id="pomo"></div>
 <div id="toast"></div>
 <input type="file" id="fileImport" accept="application/json,.json" hidden>
 
@@ -713,6 +746,7 @@ function cardHtml(k, mostrarDia) {
     <button class="check ${fin ? 'on' : ''}" data-check="${k.id}" aria-label="${fin ? 'Desmarcar' : 'Marcar como finalizado'}" title="${fin ? 'Desmarcar' : 'Finalizar'}"></button>
     <div><div class="c-tit">${esc(k.titulo)}</div><div class="c-meta">${partes.join('')}<span class="c-acts">
       <select class="como" data-como="${k.id}" title="Como concluir" aria-label="Como concluir">${COMO.map(o => `<option ${k.como === o ? 'selected' : ''}>${o}</option>`).join('')}</select>
+      ${k.materiaId ? `<button class="ico" data-pomo-card="${k.id}" title="Estudar com pomodoro" aria-label="Estudar com pomodoro">▸</button>` : ''}
       <button class="ico" data-edit="${k.id}" title="Editar" aria-label="Editar">✎</button>
       <button class="ico danger" data-del="${k.id}" title="Excluir" aria-label="Excluir">×</button>
     </span></div></div>
@@ -1027,6 +1061,7 @@ document.addEventListener('click', ev => {
   const t = ev.target.closest('button');
   if (!ev.target.closest('#calPop') && !(t && t.id === 'btnCal')) fecharCal();
   if (!t) return;
+  if (pomoClique(t)) return;
   const d = t.dataset;
   if (t.id === 'btnCal') { UI.calOpen = !UI.calOpen; $('#calPop').classList.toggle('open', UI.calOpen); return; }
   if (d.cal) { const b = UI.calMes || (S.config.prova ? pd(S.config.prova) : new Date()); UI.calMes = new Date(b.getFullYear(), b.getMonth() + (+d.cal), 1); const campos = $('#calPop .campos').outerHTML; $('#calPop').innerHTML = renderCal() + campos; return; }
@@ -1087,6 +1122,7 @@ document.addEventListener('click', ev => {
 
 document.addEventListener('change', ev => {
   const t = ev.target, d = t.dataset;
+  if (pomoMudanca(t)) return;
   if (t.id === 'inHoras') return mudarHoras(t.value);
   if (t.id === 'inProva') { if (t.value) { S.config.prova = t.value; salvar(); UI.semana = null; render(); } return; }
   if (t.id === 'inDefinir') { S.config.prova = t.checked ? null : ($('#inProva').value || iso(addD(inicioSeg(), S.config.semanas * 7 - 1))); salvar(); UI.semana = null; return render(); }
@@ -1099,7 +1135,7 @@ document.addEventListener('change', ev => {
   if (d.ainc) { assunto(d.ainc).a.incidencia = t.value; salvar(); return render(); }
 });
 document.addEventListener('toggle', ev => { if (ev.target.id === 'metas') UI.metasOpen = ev.target.open; }, true);
-document.addEventListener('keydown', ev => { if (ev.key === 'Escape') fecharCal(); });
+document.addEventListener('keydown', ev => { if (ev.key === 'Escape') { fecharCal(); if (P.aberto && !$('#modal').open) { P.aberto = false; salvarP(); renderPomo(); } } });
 
 /* Arrastar e soltar */
 let arrastando = null;
@@ -1130,8 +1166,136 @@ document.addEventListener('drop', ev => {
   }
 });
 
+/* ================= Pomodoro ================= */
+const POMO_KEY = STORAGE_KEY + '-pomo';
+const FASES_P = { foco: 'Foco', curta: 'Pausa', longa: 'Pausa longa' };
+const COR_FASE = { foco: 'var(--accent)', curta: 'var(--ok)', longa: 'var(--ok)' };
+const TITULO_BASE = document.title;
+const RAIO = 70, CIRC = 2 * Math.PI * RAIO;
+let P = { fase: 'foco', rodando: false, fim: null, restante: null, feitos: 0, materiaId: null, assuntoId: null, cardId: null, aberto: false };
+let audioCtx = null;
+const cfgP = () => (S.pomo ||= { foco: 25, curta: 5, longa: 15, ciclos: 4, auto: true });
+const durFase = f => Math.max(1, +cfgP()[f] || 1) * 60;
+const mmss = s => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+function salvarP() { try { localStorage.setItem(POMO_KEY, JSON.stringify(P)); } catch (e) {} }
+function carregarP() {
+  try { const x = JSON.parse(localStorage.getItem(POMO_KEY) || 'null'); if (x) Object.assign(P, x); } catch (e) {}
+  if (P.restante == null) P.restante = durFase(P.fase);
+}
+const restanteAgora = () => P.rodando ? Math.max(0, Math.ceil((P.fim - Date.now()) / 1000)) : P.restante;
+
+function garantirAudio() {
+  try { audioCtx ||= new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume(); } catch (e) {}
+}
+function sino() { // dois toques suaves
+  if (!audioCtx) return;
+  try {
+    [[660, 0], [880, .28]].forEach(([f, t]) => {
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain(), t0 = audioCtx.currentTime + t;
+      o.type = 'sine'; o.frequency.value = f; g.gain.setValueAtTime(0, t0);
+      g.gain.linearRampToValueAtTime(.18, t0 + .02); g.gain.exponentialRampToValueAtTime(.0001, t0 + 1.1);
+      o.connect(g).connect(audioCtx.destination); o.start(t0); o.stop(t0 + 1.2);
+    });
+  } catch (e) {}
+}
+
+function pomoIniciar() { if (P.rodando) return; garantirAudio(); P.fim = Date.now() + restanteAgora() * 1000; P.rodando = true; salvarP(); renderPomo(); }
+function pomoPausar() { if (!P.rodando) return; P.restante = restanteAgora(); P.rodando = false; P.fim = null; salvarP(); renderPomo(); }
+function pomoFase(f) { P.fase = f; P.rodando = false; P.fim = null; P.restante = durFase(f); salvarP(); renderPomo(); }
+function concluirFase(completa) {
+  const eraFoco = P.fase === 'foco', ciclos = Math.max(1, +cfgP().ciclos || 4);
+  if (eraFoco && completa) { P.feitos++; registrarFoco(Math.round(durFase('foco') / 60)); }
+  const prox = eraFoco ? (completa && P.feitos % ciclos === 0 ? 'longa' : 'curta') : 'foco';
+  if (completa) { sino(); toast(eraFoco ? `Foco concluído. Hora da ${FASES_P[prox].toLowerCase()}.` : 'Pausa encerrada. Bora voltar?', 4000); }
+  pomoFase(prox);
+}
+function registrarFoco(min) {
+  if (!cfgP().auto || !P.materiaId || !mat(P.materiaId)) return;
+  const aid = P.assuntoId || null;
+  const r = S.registros.find(r => r.pomodoro && r.data === hoje() && r.materiaId === P.materiaId && (r.assuntoId || null) === aid);
+  if (r) r.minutos += min;
+  else S.registros.push({ id: uid(), criado: Date.now(), data: hoje(), materiaId: P.materiaId, assuntoId: aid, minutos: min, questoes: 0, erros: 0, pomodoro: true });
+  const card = P.cardId && S.cards.find(k => k.id === P.cardId);
+  if (card && card.status === 'afazer') setStatus(card, 'iniciado');
+  salvar();
+  if (!$('#modal').open && !(UI.aba === 'tempo' && document.activeElement?.closest('#formReg'))) render();
+  setTimeout(() => toast(`+${hm(min)} lançados em ${mat(P.materiaId).nome}.`), 4200);
+}
+
+function atualizarRelogio() {
+  const r = restanteAgora(), dur = durFase(P.fase);
+  const t = $('#pTempo'), pill = $('#pPill'), ring = $('#pRing');
+  if (t) t.textContent = mmss(r);
+  if (pill) pill.textContent = mmss(r);
+  if (ring) ring.style.strokeDashoffset = (CIRC * (1 - r / dur)).toFixed(1);
+  document.title = P.rodando ? `${mmss(r)} · ${FASES_P[P.fase]} — ${TITULO_BASE}` : TITULO_BASE;
+}
+function renderPomo() {
+  const c = cfgP(), ciclos = Math.max(1, +c.ciclos || 4), r = restanteAgora();
+  const nFoco = (P.feitos % ciclos) + 1;
+  const lbl = P.fase === 'foco' ? (P.materiaId && mat(P.materiaId) ? mat(P.materiaId).nome : 'foco') : FASES_P[P.fase].toLowerCase();
+  let h = '';
+  if (P.aberto) {
+    h += `<div class="pomo-panel" role="dialog" aria-label="Pomodoro" style="--pc:${COR_FASE[P.fase]}">
+      <div class="pp-h"><span class="eyebrow">Pomodoro · ${P.fase === 'foco' ? `foco ${nFoco} de ${ciclos}` : `${P.feitos} ${P.feitos === 1 ? 'foco feito' : 'focos feitos'}`}</span><button class="ico" data-pomo="toggle" aria-label="Fechar">×</button></div>
+      <div class="seg pp-fases">${Object.entries(FASES_P).map(([k, n]) => `<button data-pomo-fase="${k}" class="${P.fase === k ? 'on' : ''}">${n}</button>`).join('')}</div>
+      <div class="pp-ring"><svg viewBox="0 0 160 160"><circle class="trilho" cx="80" cy="80" r="${RAIO}"/><circle class="prog" id="pRing" cx="80" cy="80" r="${RAIO}" stroke-dasharray="${CIRC.toFixed(1)}" stroke-dashoffset="${(CIRC * (1 - r / durFase(P.fase))).toFixed(1)}"/></svg>
+        <div class="pp-t"><span id="pTempo">${mmss(r)}</span><small>${FASES_P[P.fase]} de ${c[P.fase]} min</small></div></div>
+      <div class="pp-ctrl">
+        <button class="ico" data-pomo="zerar" title="Recomeçar" aria-label="Recomeçar">↺</button>
+        <button class="btn pri" data-pomo="play">${P.rodando ? 'Pausar' : (r < durFase(P.fase) ? 'Continuar' : 'Começar')}</button>
+        <button class="ico" data-pomo="pular" title="Pular para a próxima fase" aria-label="Pular">⇥</button>
+      </div>
+      <div class="pp-campos">
+        <select id="pMat" aria-label="Matéria"><option value="">Sem matéria</option>${opcoesMat(P.materiaId)}</select>
+        ${P.materiaId ? `<select id="pAss" aria-label="Assunto">${opcoesAss(P.materiaId, P.assuntoId)}</select>` : ''}
+        <label class="pp-chk"><input type="checkbox" id="pAuto" ${c.auto ? 'checked' : ''}> Lançar cada foco no Tempo de estudos</label>
+      </div>
+      <details><summary>Ajustar tempos ›</summary><div class="pp-cfg">
+        <label>Foco (min)<input type="number" min="1" max="120" data-pcfg="foco" value="${c.foco}"></label>
+        <label>Pausa (min)<input type="number" min="1" max="60" data-pcfg="curta" value="${c.curta}"></label>
+        <label>Pausa longa (min)<input type="number" min="1" max="90" data-pcfg="longa" value="${c.longa}"></label>
+        <label>Longa a cada (focos)<input type="number" min="1" max="12" data-pcfg="ciclos" value="${c.ciclos}"></label>
+      </div></details>
+    </div>`;
+  }
+  h += `<button class="pomo-pill ${P.rodando ? 'on' : ''}" data-pomo="toggle" style="--pc:${COR_FASE[P.fase]}" aria-label="Pomodoro"><span class="pdot"></span><span id="pPill">${mmss(r)}</span><span class="lbl">${esc(lbl)}</span></button>`;
+  $('#pomo').innerHTML = h;
+  atualizarRelogio();
+}
+function pomoCard(id) {
+  const k = S.cards.find(k => k.id === id); if (!k) return;
+  P.materiaId = k.materiaId || null; P.assuntoId = k.assuntoId || null; P.cardId = k.id; P.aberto = true;
+  if (P.fase !== 'foco' && !P.rodando) { P.fase = 'foco'; P.restante = durFase('foco'); }
+  salvarP(); pomoIniciar(); toast(`Foco em ${k.titulo}.`);
+}
+function pomoClique(t) {
+  const d = t.dataset;
+  if (d.pomoCard) { pomoCard(d.pomoCard); return true; }
+  if (d.pomoFase) { if (P.rodando && !confirmar('Trocar de fase interrompe o timer atual. Continuar?')) return true; pomoFase(d.pomoFase); return true; }
+  switch (d.pomo) {
+    case 'toggle': P.aberto = !P.aberto; salvarP(); renderPomo(); return true;
+    case 'play': P.rodando ? pomoPausar() : pomoIniciar(); return true;
+    case 'zerar': pomoFase(P.fase); return true;
+    case 'pular': concluirFase(false); return true;
+  }
+  return false;
+}
+function pomoMudanca(t) {
+  if (t.id === 'pMat') { P.materiaId = t.value || null; P.assuntoId = null; P.cardId = null; salvarP(); renderPomo(); return true; }
+  if (t.id === 'pAss') { P.assuntoId = t.value || null; P.cardId = null; salvarP(); return true; }
+  if (t.id === 'pAuto') { cfgP().auto = t.checked; salvar(); return true; }
+  if (t.dataset.pcfg) {
+    const k = t.dataset.pcfg; cfgP()[k] = Math.max(1, Math.round(+t.value || 1)); salvar();
+    if (!P.rodando && (k === P.fase)) P.restante = durFase(k);
+    salvarP(); renderPomo(); const el = $(`[data-pcfg="${k}"]`); el?.closest('details')?.setAttribute('open', ''); return true;
+  }
+  return false;
+}
+setInterval(() => { if (!P.rodando) return; if (restanteAgora() <= 0) concluirFase(true); else atualizarRelogio(); }, 500);
+
 /* Início */
-carregar(); salvar(); render();
+carregar(); carregarP(); salvar(); render(); renderPomo();
 </script>
 </body>
 </html>
