@@ -1113,7 +1113,7 @@ document.addEventListener('click', ev => {
     case 'sync': return modalSync();
     case 'syncAgora': puxar(); return;
     case 'syncSair': if (confirmar('Sair da sincronização neste aparelho? O progresso continua salvo aqui e na nuvem.')) { SY.cli?.auth.signOut(); fecharModal(); } return;
-    case 'syncOutroEmail': SY.linkEnviado = null; return modalSync();
+    case 'syncAlternar': SY.criando = !SY.criando; return modalSync();
     case 'ocultarAviso': S.meta.avisoOculto = true; salvar(); return render();
     case 'regerar':
       if (confirmar('Regerar o cronograma? Os blocos automáticos são redistribuídos e os status reiniciados. Tópicos criados por você e registros de horas ficam.')) { gerarCronograma(); S.meta.avisoOculto = true; salvar(); render(); toast('Cronograma regerado.'); }
@@ -1320,7 +1320,7 @@ setInterval(() => { if (!P.rodando) return; if (restanteAgora() <= 0) concluirFa
    Regra de conflito: vale a versão mais nova; se os dois lados mudaram desde o último sync, pergunta. */
 const SYNC_KEY = STORAGE_KEY + '-sync';
 const SUPABASE_LIB = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js';
-const SY = { cli: null, user: null, estado: 'off', msg: '', timer: null, puxando: false, denovo: false, linkEnviado: null };
+const SY = { cli: null, user: null, estado: 'off', msg: '', timer: null, puxando: false, denovo: false, criando: false };
 function syncCfg() {
   try { const x = JSON.parse(localStorage.getItem(SYNC_KEY) || 'null'); if (x && x.url && x.chave) return x; } catch (e) {}
   return SUPABASE_PADRAO.url && SUPABASE_PADRAO.chave ? SUPABASE_PADRAO : null;
@@ -1341,7 +1341,7 @@ async function iniciarSync() {
     const u = sess?.user || null, mudou = (u && u.id) !== (SY.user && SY.user.id);
     SY.user = u;
     if (!u) { SY.estado = 'entrar'; renderSync(); }
-    else if (mudou) { if (ev === 'SIGNED_IN' && $('#modal').open && $('#syncModal')) fecharModal(); setTimeout(puxar, 0); }
+    else if (mudou) { setTimeout(puxar, 0); }
   });
 }
 async function puxar() {
@@ -1396,16 +1396,20 @@ function renderSync() {
   const b = $('#btnSync'), novo = syncHtml();
   if (b) { if (novo) b.outerHTML = novo; else b.remove(); }
   else if (novo) $('#btnConfig')?.insertAdjacentHTML('beforebegin', novo);
-  if ($('#syncModal')) modalSync();
+  if ($('#modal').open && $('#syncModal')) modalSync();
 }
 function modalSync() {
   const c = syncCfg();
   let corpo;
   if (!c) corpo = `<p class="muted">Cole a URL do projeto e a chave pública (anon ou publishable) do Supabase. Elas ficam salvas neste navegador.</p>`;
-  else if (!SY.user) corpo = SY.linkEnviado
-    ? `<p>Enviei um link para <b>${esc(SY.linkEnviado)}</b>. Abra o e-mail <b>neste aparelho</b> e toque no link: o app volta já conectado.</p><div class="modal-f"><button class="btn ghost" data-acao="syncOutroEmail">Usar outro e-mail</button><button class="btn pri" data-acao="fechar">Ok</button></div>`
-    : `<p class="muted">Entre com seu e-mail para o progresso ficar igual em todos os aparelhos. Você recebe um link de acesso, sem senha.</p>
-       <form id="formLogin" class="row" style="margin-top:14px"><input type="email" id="syncEmail" required placeholder="seu@email.com" style="flex:1;min-width:200px" autocomplete="email"><button class="btn pri" type="submit">Enviar link</button></form>`;
+  else if (!SY.user) corpo = `<p class="muted">Entre com seu e-mail e senha para o progresso ficar igual em todos os aparelhos.</p>
+       <form id="formLogin" class="form-grid" style="grid-template-columns:1fr;margin-top:14px">
+         <label>E-mail <input type="email" id="syncEmail" required autocomplete="email" placeholder="seu@email.com"></label>
+         <label>Senha <input type="password" id="syncSenha" required minlength="6" autocomplete="${SY.criando ? 'new-password' : 'current-password'}" placeholder="${SY.criando ? 'mínimo 6 caracteres' : ''}"></label>
+         <div class="row"><button class="btn pri" type="submit">${SY.criando ? 'Criar conta' : 'Entrar'}</button><span class="spacer"></span>
+           <button class="btn ghost" type="button" data-acao="syncAlternar">${SY.criando ? 'Já tenho conta' : 'Criar conta'}</button></div>
+         <p class="small" id="loginMsg" style="color:var(--bad)" hidden></p>
+       </form>`;
   else corpo = `<p>Conectada como <b>${esc(SY.user.email)}</b>.</p>
       <p class="small muted" style="margin-top:6px">${SY.estado === 'ok' ? 'Tudo sincronizado.' : esc(SY.msg || SYNC_LBL[SY.estado] || '')}${S.meta.sincEm ? ` Última sincronização: ${new Date(S.meta.sincEm).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}.` : ''}</p>
       <div class="modal-f"><button class="btn ghost" data-acao="syncSair">Sair</button><button class="btn pri" data-acao="syncAgora">Sincronizar agora</button></div>`;
@@ -1427,12 +1431,29 @@ function modalSync() {
   const fl = $('#formLogin');
   if (fl) fl.onsubmit = async ev => {
     ev.preventDefault();
-    if (!SY.cli) return toast(SY.msg || 'A sincronização ainda não carregou.');
-    const email = $('#syncEmail').value.trim(), btn = fl.querySelector('button'); btn.disabled = true; btn.textContent = 'Enviando…';
-    const { error } = await SY.cli.auth.signInWithOtp({ email, options: { emailRedirectTo: location.origin + location.pathname } });
-    if (error) { btn.disabled = false; btn.textContent = 'Enviar link'; return toast('Não deu para enviar: ' + error.message, 5000); }
-    SY.linkEnviado = email; modalSync();
+    const msg = $('#loginMsg'), btn = fl.querySelector('button[type=submit]'), rotulo = btn.textContent;
+    const erro = t => { msg.textContent = t; msg.hidden = false; btn.disabled = false; btn.textContent = rotulo; };
+    if (!SY.cli) return erro(SY.msg || 'A sincronização ainda não carregou. Recarregue a página.');
+    const email = $('#syncEmail').value.trim(), password = $('#syncSenha').value;
+    btn.disabled = true; btn.textContent = SY.criando ? 'Criando…' : 'Entrando…'; msg.hidden = true;
+    if (SY.criando) {
+      const { data, error } = await SY.cli.auth.signUp({ email, password });
+      if (error) return erro(traduzErro(error.message));
+      if (!data.session) return erro('Conta criada, mas o Supabase está pedindo confirmação por e-mail. Desligue "Confirm email" em Authentication → Sign In / Providers → Email e tente entrar.');
+    } else {
+      const { error } = await SY.cli.auth.signInWithPassword({ email, password });
+      if (error) return erro(traduzErro(error.message));
+    }
+    SY.criando = false; fecharModal(); toast('Conectada. Sincronizando…');
   };
+}
+function traduzErro(m) {
+  if (/invalid login credentials/i.test(m)) return 'E-mail ou senha incorretos.';
+  if (/email not confirmed/i.test(m)) return 'Esse e-mail ainda não foi confirmado. Confirme pelo e-mail ou marque o usuário como confirmado no Supabase.';
+  if (/already registered|already exists/i.test(m)) return 'Esse e-mail já tem conta. Use “Já tenho conta”.';
+  if (/signups not allowed|signup is disabled/i.test(m)) return 'Novos cadastros estão desligados neste projeto.';
+  if (/password/i.test(m) && /6|short|weak/i.test(m)) return 'Senha fraca: use pelo menos 6 caracteres.';
+  return 'Não deu certo: ' + m;
 }
 
 /* Início */
